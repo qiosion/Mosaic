@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'forum',
 ]
 
 MIDDLEWARE = [
@@ -76,9 +77,9 @@ WSGI_APPLICATION = 'config.wsgi.application'
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.mysql",
-        "NAME": 'ai_dev',
-        "USER": 'admin',
-        "PASSWORD": '1234',
+        "NAME": 'mosaic',
+        "USER": 'teamMosaic',
+        "PASSWORD": 'mosaic',
         "HOST": 'localhost',
         "PORT": '3306',
     }

@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>POST 방식</title>
+</head>
+<body>
+    <h1>POST 방식을 위해서는 form이 필요하다</h1>
+    <form action="/test/getpost" method="post">
+        {% csrf_token %}
+        <input name="var1">
+        <input name="var2">
+        <button>전송</button>
+    </form>
+
+    <br>
+{{ key1 }}
+</body>
+</html>

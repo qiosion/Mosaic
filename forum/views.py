@@ -20,7 +20,7 @@ def create(request):
         if postForm.is_valid():
             post = postForm.save(commit=False)
             post.save()
-        return redirect("/admin/")
+        return redirect('/forum/read/' + str(post.id))
 
 
 def list(request):
@@ -33,8 +33,8 @@ def list(request):
         context
     )
 
-def read(request):
-    post = Post.objects.get(id=1)
+def read(request, forum_id):
+    post = Post.objects.get(id=forum_id)
     context = { 'post': post }
 
     return render(
@@ -42,3 +42,27 @@ def read(request):
         'forum/read.html',
         context
     )
+
+def delete(request, forum_id):
+    post = Post.objects.get(id=forum_id)
+    post.delete()
+    return redirect('/forum/list')
+
+def update(request, forum_id):
+    post = Post.objects.get(id=forum_id)
+
+    if request.method == "GET":
+        postForm = PostForm(instance=post)
+        context = { 'postForm': postForm }
+        return render(
+            request,
+            "forum/update.html",
+            context
+        )
+    elif request.method == "POST":
+        postForm = PostForm(request.POST, instance=post)
+
+        if postForm.is_valid():
+            post = postForm.save(commit=False)
+            post.save()
+        return redirect('/forum/read/' + str(post.id))

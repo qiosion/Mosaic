@@ -22,4 +22,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('forum/create', forum.views.create),
     path('forum/list', forum.views.list),
+    path('forum/read/<int:forum_id>', forum.views.read),
+    path('forum/delete/<int:forum_id>', forum.views.delete),
+    path('forum/update/<int:forum_id>', forum.views.update),
 ]

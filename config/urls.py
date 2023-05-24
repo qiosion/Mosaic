@@ -20,9 +20,6 @@ import forum.views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('abc/', forum.views.abc),
-    path('getdata', forum.views.getdata),
-    path('getpostpage', forum.views.getpostpage),
-    # templates\sendpost.html 의 form 에서 설정한 action 의 url
-    path('test/getpost', forum.views.postdata),
+    path('forum/create', forum.views.create),
+    path('forum/list', forum.views.list),
 ]

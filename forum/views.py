@@ -1,46 +1,44 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 
-# Create your views here.
-def abc(request):
+from forum.forms import PostForm
+from forum.models import Post
+
+
+# 게시판 글 생성
+def create(request):
+    if request.method == "GET":
+        postForm = PostForm()
+        context = { 'postForm': postForm }
+        return render(
+            request,
+            "forum/create.html",
+            context
+        )
+    elif request.method == "POST":
+        postForm = PostForm(request.POST)
+
+        if postForm.is_valid():
+            post = postForm.save(commit=False)
+            post.save()
+        return redirect("/admin/")
+
+
+def list(request):
+    posts = Post.objects.all().order_by('-create_date')
+    context = { 'posts': posts }
+
     return render(
         request,
-        "abc.html"
+        'forum/list.html',
+        context
     )
 
-def getdata(request):
-    # 서버에서 받는 값
-    num1 = request.GET.get("var1")
-    num2 = request.GET.get("var2")
-
-    print(int(num1) + int(num2))
-
-    # 서버 -> 클라이언트
-    context = { 'key1': int(num1) + int(num2) }
+def read(request):
+    post = Post.objects.get(id=1)
+    context = { 'post': post }
 
     return render(
         request,
-        "getdata.html",
-        context  # 해당 html 안에 context 라고하는 딕셔너리가 들어가게 됨
-    )
-
-def getpostpage(request):
-    return render(
-        request,
-        "sendpost.html"
-    )
-
-def postdata(request):
-    # 서버에서 받는 값
-    num1 = request.POST.get("var1")
-    num2 = request.POST.get("var2")
-
-    print(int(num1) + int(num2))
-
-    # 서버 -> 클라이언트
-    context = {'key1': int(num1) + int(num2)}
-
-    return render(
-        request,
-        "sendpost.html",
+        'forum/read.html',
         context
     )

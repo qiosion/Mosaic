@@ -1,3 +1,4 @@
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 
 from forum.forms import PostForm
@@ -5,6 +6,7 @@ from forum.models import Post
 
 
 # 게시판 글 생성
+@login_required(login_url='/member/login')
 def create(request):
     if request.method == "GET":
         postForm = PostForm()
@@ -19,6 +21,7 @@ def create(request):
 
         if postForm.is_valid():
             post = postForm.save(commit=False)
+            post.member = request.user
             post.save()
         return redirect('/forum/read/' + str(post.id))
 
@@ -43,13 +46,20 @@ def read(request, forum_id):
         context
     )
 
+@login_required(login_url='/member/login')
 def delete(request, forum_id):
     post = Post.objects.get(id=forum_id)
+    if request.user != post.member:
+        return redirect('/forum/read/' + str(forum_id))
     post.delete()
     return redirect('/forum/list')
 
+@login_required(login_url='/member/login')
 def update(request, forum_id):
     post = Post.objects.get(id=forum_id)
+
+    if request.user != post.member:
+        return redirect('/forum/read/' + str(forum_id))
 
     if request.method == "GET":
         postForm = PostForm(instance=post)

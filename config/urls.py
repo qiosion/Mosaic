@@ -17,12 +17,20 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 import forum.views
+import member.views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+
+    # forum 게시판 -> 테스트버전
     path('forum/create', forum.views.create),
     path('forum/list', forum.views.list),
     path('forum/read/<int:forum_id>', forum.views.read),
     path('forum/delete/<int:forum_id>', forum.views.delete),
     path('forum/update/<int:forum_id>', forum.views.update),
+
+    # member 회원
+    path('member/signup', member.views.signup),
+    path('member/login', member.views.login),
+    path('member/logout', member.views.logout),
 ]

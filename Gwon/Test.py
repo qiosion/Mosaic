@@ -12,9 +12,12 @@ eye_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_eye.xml
 # 요는 양쪽 방향으로 45도 미만 롤에는 제한이 없다
 
 # 이미지 불러오기
-img = cv2.imread('dd.png')
+img = cv2.imread('./dd.png')
+print(img.shape)
+# cv2.imshow('image', img)  # img 쓰면 얼굴 검출  img_w_mosaic 쓰면 블러처리 됨
+# cv2.waitKey(0)
 gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-
+# exit()
 # 얼굴 찾기
 faces = face_cascade.detectMultiScale(gray, 1.2, 4)
 for (x, y, w, h) in faces:
@@ -35,6 +38,7 @@ for (x, y, w, h) in faces:
 sideface = sideface_cascade.detectMultiScale(gray, 1.2, 3)
 for (x, y, w, h) in sideface:
     cv2.rectangle(img, (x, y), (x + w, y + h), (0, 255, 0), 2)
+# exit()
 
 # 영상 출력
 cv2.imshow('image', img)  # img 쓰면 얼굴 검출  img_w_mosaic 쓰면 블러처리 됨

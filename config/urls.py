@@ -33,8 +33,8 @@ urlpatterns = [
     # path('forum/delete/<int:forum_id>', forum.views.delete),
     # path('forum/update/<int:forum_id>', forum.views.update),
 
-    # member 회원
-    path('member/signup', member.views.signup),
-    path('member/login', member.views.login),
-    path('member/logout', member.views.logout),
+    # member_test 회원
+    path('member_test/signup', member.views.signup),
+    path('member_test/login', member.views.login),
+    path('member_test/logout', member.views.logout),
 ]

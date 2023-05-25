@@ -6,7 +6,7 @@ from forum.models import Post
 
 
 # 게시판 글 생성
-@login_required(login_url='/member/login')
+@login_required(login_url='/member_test/login')
 def create(request):
     if request.method == "GET":
         postForm = PostForm()
@@ -46,7 +46,7 @@ def read(request, forum_id):
         context
     )
 
-@login_required(login_url='/member/login')
+@login_required(login_url='/member_test/login')
 def delete(request, forum_id):
     post = Post.objects.get(id=forum_id)
     if request.user != post.member:
@@ -54,7 +54,7 @@ def delete(request, forum_id):
     post.delete()
     return redirect('/forum/list')
 
-@login_required(login_url='/member/login')
+@login_required(login_url='/member_test/login')
 def update(request, forum_id):
     post = Post.objects.get(id=forum_id)
 

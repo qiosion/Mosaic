@@ -24,17 +24,12 @@ import member.views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', TemplateView.as_view(template_name='index.html'), name='index'),
-    path('forum/', include('forum.urls')),
+    path('forum/', include('forum.urls')), # 테스트용 게시판임
+    path('board/', include('board.urls')),
 
-    # forum -> 개별 url로 이동
-    # path('forum/create', forum.views.create),
-    # path('forum/list', forum.views.list),
-    # path('forum/read/<int:forum_id>', forum.views.read),
-    # path('forum/delete/<int:forum_id>', forum.views.delete),
-    # path('forum/update/<int:forum_id>', forum.views.update),
 
     # member 회원
     path('member/signup', member.views.signup),
-    path('member/login', member.views.login),
+    path('member/login', member.views.login, name="login"),
     path('member/logout', member.views.logout),
 ]

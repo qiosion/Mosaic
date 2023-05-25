@@ -15,19 +15,23 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, include
+from django.views.generic import TemplateView
+
 import forum.views
 import member.views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('', TemplateView.as_view(template_name='index.html'), name='index'),
+    path('forum/', include('forum.urls')),
 
-    # forum 게시판 -> 테스트버전
-    path('forum/create', forum.views.create),
-    path('forum/list', forum.views.list),
-    path('forum/read/<int:forum_id>', forum.views.read),
-    path('forum/delete/<int:forum_id>', forum.views.delete),
-    path('forum/update/<int:forum_id>', forum.views.update),
+    # forum -> 개별 url로 이동
+    # path('forum/create', forum.views.create),
+    # path('forum/list', forum.views.list),
+    # path('forum/read/<int:forum_id>', forum.views.read),
+    # path('forum/delete/<int:forum_id>', forum.views.delete),
+    # path('forum/update/<int:forum_id>', forum.views.update),
 
     # member 회원
     path('member/signup', member.views.signup),

@@ -5,60 +5,76 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="index.css">
-    <title>Mainpage</title>
-
-    <style>
-
-        @import url('https://fonts.googleapis.com/css2?family=Cute+Font&display=swap');
-        li {
-            font-size:30px ;
-            font-family: 'Cute Font', cursive;
-        }
-        body{ background-image: url(background.png);
-            background-repeat: no-repeat;
-            background-size: cover;
-        }
-        ul{ list-style:none;
-        }
-        
-
-    </style>
+    <title>Mosaic The Face</title>
 </head>
-
 <body>
     <header>
-        <div class="logo">
+        <!-- <div class="logo">
             <img src="https://raw.githubusercontent.com/mdn/beginner-html-site/gh-pages/images/firefox-icon.png" style="width:100px; height:100px;">
             <h3>Mosaic The Face</h3>
-            <nav>
-                <ul class="menu">
-                    <li><a href="#">Home</a></li>
-                    <li><a href="#">Gallery</a></li>
-                    <li><a href="#">Mypage</a></li>
-                    <li><a href="#">게시판</a></li>
-                  </ul>
-            </nav>
+    </header> -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container-fluid">
+          <a class="navbar-brand" href="#">Mosaic The Face</a>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarColor01">
+            <ul class="navbar-nav me-auto">
+              <li class="nav-item">
+                <a class="nav-link active" href="#">Home
+                  <span class="visually-hidden">(current)</span>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#">Board</a>
+              </li>
+
+              <li class="nav-item">
+                <a class="nav-link" href="#">Mypage</a>
+              </li>
+
+            </ul>
+            <form class="btn btn-primary">
+                <button type="button" class="btn btn-primary">sign up</button>
+                <button type="button" class="btn btn-primary">log in</button>
+              </form>
+          </div>
         </div>
+      </nav>
     </header>
-    <main>
-        <div class="main">
+      <h2>인공지능을 이용한 모자이크 처리 기능</h2>
+        <p>코로나로 인한 마스크 착용으로 얼굴 노출이 최소화 되었으나. 마스크 착용 헤제로 인해 얼굴 노출의 기회가 많아졌습니다.</p>
+        <p>이로 인해 저희는 인공지능을 이용하여 여러분들의 얼굴에 모자이크 처리를 해드리는 사이트를 만들었습니다.</p>
+        <p>SNS에 사진 올릴때 타인의 개인정보 보호를 위해 모자이크 처리를 할수있습니다.</p>
+        <p>아래 사진은 모자이크 처리 전 사진과 모자이크 처리 후 사진을 넣은 사진입니다. </p>
 
-        </div>
+        <img src="index.png" alt="Image">
 
-    </main>
-    <footer>
-        <div id="disqus_thread"></div>
-        <script>
-            (function() { // DON'T EDIT BELOW THIS LINE
-            var d = document, s = d.createElement('script');
-            s.src = 'https://marmalade-2.disqus.com/embed.js';
-            s.setAttribute('data-timestamp', +new Date());
-            (d.head || d.body).appendChild(s);
-            })();
-        </script>
-        <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
-        </noscript>
-    </footer>
+        <p>객체 검출을 통하여 사람을 찾아내고 얼굴을 인식하여 모자이크 처리를 할수있습니다.</p>
 
+<footer>
+    <nav>
+        <div>
+            <ul class="pagination">
+              <li class="page-item disabled">
+                <a class="page-link" href="#">&laquo;</a>
+              </li>
+              <li class="page-item active">
+                <a class="page-link" href="#">1</a>
+              </li>
+              <li class="page-item">
+                <a class="page-link" href="#">2</a>
+              </li>
+              <li class="page-item">
+                <a class="page-link" href="#">3</a>
+              </li>
+              <li class="page-item">
+                <a class="page-link" href="#">&raquo;</a>
+              </li>
+            </ul>
+          </div>
+    </nav>
+</footer>
 </body>
 </html>

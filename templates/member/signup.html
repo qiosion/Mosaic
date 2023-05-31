@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Signup</title>
+    <style type="text/css">
+        
+        
+        /* div.container{} */
+      
+        /* div.insert{} */
+   
+      div.create{
+      width: 800px;
+      text-align: center;
+      padding: 30px;
+      border-bottom: 1px solid black;
+      margin: auto;
+      }
+   
+      table{
+      height: 300px;
+      width: 900px;
+      border-top: 3px solid black;
+      margin-right: auto;
+      margin-left: auto;
+      }
+   
+      td{
+      border-bottom: 1px dotted black;
+      }
+   
+      caption{
+      text-align: left;
+      }
+   
+      .col1 {
+      background-color: #e8e8e8;
+      padding: 10px;
+      text-align: right;
+      font-weight: bold;
+      font-size: 0.8em;
+      }
+   
+      .col2 {
+      text-align: left;
+      padding: 5px;
+      }
+   
+      .but1 {
+      height: 25px;
+      width: 80px;
+      color: white;
+      background-color: black;
+      border-color: black;
+      }
+   
+      .but2 {
+      height: 27px;
+      width: 120px;
+      color: white;
+      background-color: black;
+      border-color: black;
+      }
+   
+      .but3 {
+      height: 35px;
+      width: 150px;
+      background-color: white;
+      border: 2px solid black;
+      }
+   
+      .but4{
+      height: 35px;
+      width: 150px;
+      background-color: white;
+      border: 2px solid black;
+      }
+      
+      .but1:hover {
+      background-color: #b9b9b9;
+      color: black;
+      border: 2px solid black;
+      }
+   
+      .but2:hover {
+      background-color: #b9b9b9;
+      color: black;
+      border: 2px solid black;
+      }
+   
+      .but3:hover {
+      background-color: black;
+      color: white;
+      border: 2px solid black;
+      }
+   
+      .but4:hover {
+      background-color: black;
+      color: white;
+      border: 2px solid black;
+      }
+      
+      p{
+      font-size: 0.7em;
+      }
+   
+      .g{
+      font-size: 0.7em;
+      }
+   
+      .c{
+      font-size: 0.7em;
+      }
+   
+      .a{
+      font-size: 0.7em;
+      }
+      
+      .num{
+      color: red;
+      }
+   
+
+    </style>
+    
+</head>
+<body>
+<!-- <footer>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container-fluid">
+          <a class="navbar-brand" href="#">Mosaic The Face</a>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+            <div class="collapse navbar-collapse" id="navbarColor01">
+                <ul class="navbar-nav me-auto">
+                <li class="nav-item">
+                    <a class="nav-link active" href="#">Home
+                    <span class="visually-hidden">(current)</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Board</a>
+                </li>
+                
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Mypage</a>
+                </li>
+            </div>
+            </ul>
+            <form class="btn btn-primary">
+                <button type="button" class="btn btn-primary">sign up</button>
+                <button type="button" class="btn btn-primary">log in</button>
+              </form>
+          </div>
+        </div>
+      </nav>
+      
+</footer> -->
+    
+
+    <form method="post" action="">
+        <div class="container">
+      <div class="insert">
+      
+          <table>
+      <caption><h2>회원가입 양식</h2></caption>
+      <tr>
+          <td class="col1">이름</td>
+          <td class="col2"><input type="text" name="name" maxlength="5"></td>
+      </tr>
+      <tr>
+          <td class="col1">아이디</td>
+          <td class="col2">
+              <input type="text" name="id" maxlength="10">
+              <input class='but1' type="button" value="중복확인" onclick="">
+          </td>
+      </tr>
+      <tr>
+          <td class="col1">비밀번호</td>
+          <td class="col2">
+              <input type="password" name="pwd" maxlength="16">
+              <p>※비밀번호는 <span class="num">문자, 숫자, 특수문자(~!@#$%^&*)의 조합
+              10 ~ 16자리</span>로 입력이 가능합니다.</p>
+          </td>
+      </tr>
+      <tr>
+          <td class="col1">비밀번호 확인</td>
+          <td class="col2"><input type="password" name="pwdCheck" maxlength="16"></td>
+      </tr>
+      <tr>
+          <td class="col1">이메일</td>
+          <td class="col2">
+              <input type="text" name="mailid">
+              <span class="a">@</span>
+              <input type="text" name="email">
+              <select name="mailslc">
+                  <option value="self" selected>직접입력</option>
+                  <option value="naver">naver.com</option>
+                  <option value="gm">gmail.com</option>
+                  <option value="da">daum.com</option>
+                  <option value="yah">yahoo.com</option>
+              </select>
+              <input class='but2' type="button" value="이메일 중복확인" onclick="">
+          </td>
+      </tr>
+      </table>
+      
+    </div>
+   
+    <div class="create">
+      
+          <input class="but3" type="button" value="가입취소" onclick="">
+          <input class="but4" type="button" value="회원가입" onclick="formCheck(this.form)">
+      
+    </div>
+    </div>
+    </form>
+
+    <script>
+        function formCheck(form) {
+            //유효성 검사
+            if(form.name.value == "") {
+                alert('이름을 입력하세요.');
+                form.name.focus() ;
+                return ;
+            }
+            if(form.id.value == "") {
+                alert('아이디를 입력하세요.');
+                form.id.focus() ;
+                return ;
+            }
+            if(form.pwd.value == "") {
+                alert('비밀번호를 입력하세요.');
+                form.pwd.focus() ;
+                return ;
+            }
+            if(form.pwd.value.length < 10 || form.pwd.value.length > 16) {
+                alert('비밀번호는 10 ~ 16자 사이로 입력하세요.');
+                form.pwd.focus() ;
+                return ;
+            }
+            if(form.pwdCheck.value == "") {
+                alert('비밀번호 확인을 입력하세요.');
+                form.pwdCheck.focus() ;
+                return ;
+            }
+            if(form.mailid.value == "") {
+                alert('e-mail을 입력하세요.');
+                form.mailid.focus() ;
+                return ;
+            }
+            if(form.mailid.value == "") {
+                alert('e-mail을 입력하세요.');
+                form.mailid.focus() ;
+                return ;
+            }
+            if(form.email.value == "" && form.mailslc.selectedIndex == 0) {
+                alert('e-mail을 입력하세요.');
+                form.mailslc.focus() ;
+                return ;
+            }
+            alert('회원가입이 완료되었습니다.') ;
+     
+            form.reset();
+            }
+     
+      </script>
+   </body>
+</html>

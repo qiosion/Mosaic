@@ -39,3 +39,13 @@ def read(request, board_no):
         'board/read.html',
         context
     )
+
+def list(request):
+    posts = Board.objects.all().order_by('-board_date')
+    context = { 'posts': posts }
+
+    return render(
+        request,
+        'board/list.html',
+        context
+    )

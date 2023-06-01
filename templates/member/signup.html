@@ -161,7 +161,9 @@
       </nav>
       
 </footer> -->
-
+{% if error_message %}
+    <p>{{error_message}}</p>
+{% endif %}
 
 <form method="post" action="/member/signup">
     {% csrf_token %}

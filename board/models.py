@@ -1,9 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
 
-import member
-from django.contrib.auth.models import User
-
 
 def upload_path(instance, filename):
     # 업로드 경로를 동적으로 생성

@@ -4,7 +4,7 @@ from django.shortcuts import render, redirect
 import member
 from board.models import Board
 
-# @login_required(login_url='/member/login')
+@login_required(login_url='/member/login')
 def create(request):
     if request.method == "POST":
         board_title = request.POST.get('board_title')

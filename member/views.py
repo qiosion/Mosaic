@@ -27,7 +27,7 @@ def login(request):
         context = { 'loginForm': loginForm }
         return render(
             request,
-            'member/login_test.html',
+            'member/login.html',
             context
         )
     elif request.method == "POST":
@@ -41,4 +41,4 @@ def login(request):
 def logout(request):
     auth_logout(request)
     # return redirect('/forum/list')
-    return redirect('login')
+    return redirect('/')

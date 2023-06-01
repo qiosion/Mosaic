@@ -3,6 +3,7 @@ from django.shortcuts import render, redirect
 
 from forum.forms import PostForm
 from forum.models import Post
+from member.models import customMember
 
 
 # 게시판 글 생성
@@ -21,7 +22,8 @@ def create(request):
 
         if postForm.is_valid():
             post = postForm.save(commit=False)
-            post.member = request.user
+            mbr_no = customMember.objects.get(mbr_no=request.user.mbr_no)
+            post.member = mbr_no
             post.save()
         return redirect('/forum/read/' + str(post.id))
 
@@ -49,7 +51,10 @@ def read(request, forum_id):
 @login_required(login_url='/member/login')
 def delete(request, forum_id):
     post = Post.objects.get(id=forum_id)
-    if request.user != post.member:
+
+    mbr_no = customMember.objects.get(mbr_no=request.user.mbr_no)
+    # if request.user != post.member:
+    if mbr_no != post.member:
         return redirect('/forum/read/' + str(forum_id))
     post.delete()
     return redirect('/forum/list')
@@ -58,7 +63,9 @@ def delete(request, forum_id):
 def update(request, forum_id):
     post = Post.objects.get(id=forum_id)
 
-    if request.user != post.member:
+    mbr_no = customMember.objects.get(mbr_no=request.user.mbr_no)
+    # if request.user != post.member:
+    if mbr_no != post.member:
         return redirect('/forum/read/' + str(forum_id))
 
     if request.method == "GET":

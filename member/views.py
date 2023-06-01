@@ -2,24 +2,23 @@ from django.contrib.auth import login as auth_login
 from django.contrib.auth import logout as auth_logout
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.shortcuts import render, redirect
-from member.forms import CustomUserCreationForm
 
 # 회원가입
 def signup(request):
     if request.method == "POST":
-        # signupForm = UserCreationForm(request.POST)
-        signupForm = CustomUserCreationForm(request.POST)
+        signupForm = UserCreationForm(request.POST)
         if signupForm.is_valid():
             member = signupForm.save(commit=False)
             member.save()
             return redirect('index') # 회원가입 성공 시 메인으로 돌아감
     else:
-        # signupForm = UserCreationForm()
-        signupForm = CustomUserCreationForm()
-
-    return render(request,
-                  'member/signup.html',
-                  {'signupForm': signupForm})
+        signupForm = UserCreationForm()
+        context = {'signupForm': signupForm}
+        return render(
+            request,
+            'member/signup.html',
+            context
+        )
 
 # 로그인
 def login(request):

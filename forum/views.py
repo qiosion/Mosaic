@@ -3,7 +3,6 @@ from django.shortcuts import render, redirect
 
 from forum.forms import PostForm
 from forum.models import Post
-from member.models import customMember
 
 
 # 게시판 글 생성
@@ -11,7 +10,7 @@ from member.models import customMember
 def create(request):
     if request.method == "GET":
         postForm = PostForm()
-        context = { 'postForm': postForm }
+        context = {'postForm': postForm}
         return render(
             request,
             "forum/create.html",
@@ -22,15 +21,14 @@ def create(request):
 
         if postForm.is_valid():
             post = postForm.save(commit=False)
-            mbr_no = customMember.objects.get(mbr_no=request.user.mbr_no)
-            post.member = mbr_no
+            post.member = request.user
             post.save()
         return redirect('/forum/read/' + str(post.id))
 
 
 def list(request):
     posts = Post.objects.all().order_by('-create_date')
-    context = { 'posts': posts }
+    context = {'posts': posts}
 
     return render(
         request,
@@ -38,9 +36,10 @@ def list(request):
         context
     )
 
+
 def read(request, forum_id):
     post = Post.objects.get(id=forum_id)
-    context = { 'post': post }
+    context = {'post': post}
 
     return render(
         request,
@@ -48,29 +47,26 @@ def read(request, forum_id):
         context
     )
 
+
 @login_required(login_url='/member/login')
 def delete(request, forum_id):
     post = Post.objects.get(id=forum_id)
-
-    mbr_no = customMember.objects.get(mbr_no=request.user.mbr_no)
-    # if request.user != post.member:
-    if mbr_no != post.member:
+    if request.user != post.member:
         return redirect('/forum/read/' + str(forum_id))
     post.delete()
     return redirect('/forum/list')
+
 
 @login_required(login_url='/member/login')
 def update(request, forum_id):
     post = Post.objects.get(id=forum_id)
 
-    mbr_no = customMember.objects.get(mbr_no=request.user.mbr_no)
-    # if request.user != post.member:
-    if mbr_no != post.member:
+    if request.user != post.member:
         return redirect('/forum/read/' + str(forum_id))
 
     if request.method == "GET":
         postForm = PostForm(instance=post)
-        context = { 'postForm': postForm }
+        context = {'postForm': postForm}
         return render(
             request,
             "forum/update.html",

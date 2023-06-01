@@ -2,7 +2,7 @@ from django.db import models
 from django.contrib.auth.models import User
 
 import member
-from member.models import customMember
+from django.contrib.auth.models import User
 
 
 def upload_path(instance, filename):
@@ -19,7 +19,7 @@ class Board(models.Model):
     board_upload = models.FileField(null=False, upload_to=upload_path)
     board_download = models.CharField(max_length=255, null=True, default=upload_path)
     board_date = models.DateTimeField(null=True, auto_now_add=True)  # 현재 시간
-    mbr_no = models.ForeignKey(customMember, on_delete=models.CASCADE)
+    member = models.ForeignKey(User, on_delete=models.CASCADE)
 
     class Meta:
         db_table = "Board"

@@ -6,21 +6,18 @@ from django.shortcuts import render, redirect
 
 # 회원가입
 def signup(request):
-    if request.method == "GET":
-        signupForm = UserCreationForm()
-        context = { 'signupForm': signupForm }
-        return render(
-            request,
-            'member/signup_test.html',
-            context
-        )
-    elif request.method == "POST":
+    if request.method == "POST":
         signupForm = UserCreationForm(request.POST)
         if signupForm.is_valid():
             member = signupForm.save(commit=False)
             member.save()
-        # return redirect('/board/list')
-        return redirect('login')
+            return redirect('index') # 회원가입 성공 시 메인으로 돌아감
+    else:
+        signupForm = UserCreationForm()
+
+    return render(request,
+                  'member/signup.html',
+                  {'signupForm': signupForm})
 
 # 로그인
 def login(request):

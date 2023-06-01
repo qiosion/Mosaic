@@ -4,7 +4,7 @@ from django.shortcuts import render, redirect
 import member
 from board.models import Board
 
-@login_required(login_url='/member/login')
+# @login_required(login_url='/member/login')
 def create(request):
     if request.method == "POST":
         board_title = request.POST.get('board_title')
@@ -18,7 +18,7 @@ def create(request):
 
             return redirect('read', board_no=post.board_no)
         else:
-            error_message = '제목 작성과 업로드할 파일을 첨부해주세요'
+            error_message = '제목 작성과 업로드할 파일을 첨부를 확인하세요'
             return render(
                 request,
                 'board/create.html',

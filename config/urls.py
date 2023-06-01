@@ -28,11 +28,7 @@ urlpatterns = [
     path('', TemplateView.as_view(template_name='index.html'), name='index'),
     path('forum/', include('forum.urls')), # 테스트용 게시판임
     path('board/', include('board.urls')),
+    path('member/', include('member.urls')),
 
-
-    # member 회원
-    path('member/signup', member.views.signup),
-    path('member/login', member.views.login, name="login"),
-    path('member/logout', member.views.logout),
 ]
               # + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

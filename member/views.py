@@ -1,15 +1,14 @@
-from django.contrib.auth import login as auth_login
+from django.contrib.auth import login as auth_login, authenticate
 from django.contrib.auth import logout as auth_logout
-from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.models import User
+from django.core.exceptions import ValidationError
+from django.core.validators import EmailValidator
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 
 # 회원가입
 def signup(request):
     if request.method == "GET":
-        # signupForm = SignupForm()
-        # context = {'signupForm': signupForm}
         return render(
             request,
             'member/signup.html',
@@ -22,8 +21,20 @@ def signup(request):
         email2 = request.POST.get('email2')
         if first_name and username and password and email1 and email2:
             email = f"{email1}@{email2}"
-            user = User(first_name=first_name, username=username, password=password, email=email)
+
+            # email_validator = EmailValidator()
+            # try:
+            #     email_validator(email)
+            # except ValidationError:
+            #     error_message = "유효한 이메일 주소를 입력해주세요."
+            #     context = {'error_message': error_message}
+            #     return render(request, 'member/signup.html', context)
+
+            user = User(first_name=first_name, username=username)
+            user.set_password(password) # 비밀번호 암호화
+            user.email = email
             user.save()
+
             return redirect('index')  # 회원가입 성공 시 메인으로 돌아감
         else:
             error_message = "폼이 유효하지 않습니다"
@@ -34,19 +45,30 @@ def signup(request):
 # 로그인
 def login(request):
     if request.method == "GET":
-        loginForm = AuthenticationForm()
-        context = { 'loginForm': loginForm }
         return render(
             request,
             'member/login.html',
-            context
         )
     elif request.method == "POST":
-        loginForm = AuthenticationForm(request, request.POST)
-        if loginForm.is_valid():
-            auth_login(request, loginForm.get_user())
-        # return redirect('/forum/list')
-        return redirect('login')
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        if username and password:
+            user = authenticate(request, username=username, password=password)
+
+            if user is not None:
+                auth_login(request, user)
+                return redirect('index')
+            else:
+                error_message = "아이디 또는 비밀번호가 일치하지 않습니다"
+                return render(request,
+                              'member/login.html',
+                              {'error_message': error_message})
+        else:
+            error_message = "아이디 또는 비밀번호를 입력해주세요"
+            return render(request,
+                          'member/login.html',
+                          {'error_message': error_message})
+    return HttpResponse("Invalid request")
 
 # 로그아웃
 def logout(request):

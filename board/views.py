@@ -10,13 +10,16 @@ def create(request):
         board_title = request.POST.get('board_title')
         board_content = request.POST.get('board_content')
         board_upload = request.FILES.get('board_upload')
+        print('board_title : ', board_title)
+        print('board_content : ', board_content)
+        print('board_upload : ', board_upload)
 
         if board_title and board_upload:
             member = request.user
             board = Board(member=member, board_title=board_title, board_content=board_content, board_upload=board_upload)
             board.save()
-
-            return redirect('read', board_no=board.board_no)
+            return redirect('list')
+            # return redirect('read', board_no=board.board_no)
         else:
             error_message = '제목 작성과 업로드할 파일을 첨부를 확인하세요'
             return render(
@@ -24,21 +27,21 @@ def create(request):
                 'board/create.html',
                 {'error_message': error_message}
             )
-    else:
+    elif request.method == "GET":
         return render(
             request,
             'board/create.html'
         )
 
-def read(request, board_no):
-    post = Board.objects.get(board_no=board_no)
-    context = { 'post': post }
-
-    return render(
-        request,
-        'board/read.html',
-        context
-    )
+# def read(request, board_no):
+#     post = Board.objects.get(board_no=board_no)
+#     context = { 'post': post }
+#
+#     return render(
+#         request,
+#         'board/read.html',
+#         context
+#     )
 
 def list(request):
     posts = Board.objects.all().order_by('-board_date')

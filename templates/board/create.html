@@ -7,6 +7,9 @@
     <link rel="stylesheet" href="css.css">
 </head>
 <body>
+<form action="/board/create" method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{error_message}}
     <div class="board_wrap">
         <div class="board_title">
             <h1>사진 업로드</h1>
@@ -31,10 +34,11 @@
                 </div>
             </div>
             <div class="bt_wrap">
-                <a href="read.html" class="on">등록</a>
+                <button>등록</button>
                 <a href="list.html">취소</a>
             </div>
         </div>
     </div>
+    </form>
 </body>
 </html>

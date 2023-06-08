@@ -11,16 +11,12 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.AlterField(
-            model_name="board",
-            name="board_download",
-            field=models.FileField(
-                default=board.models.upload_path, null=True, upload_to=""
-            ),
+        migrations.RemoveField(
+            model_name='board',
+            name='board_download',
         ),
-        migrations.AlterField(
-            model_name="board",
-            name="board_upload",
-            field=models.FileField(upload_to=board.models.upload_path),
+        migrations.RemoveField(
+            model_name='board',
+            name='board_upload',
         ),
     ]

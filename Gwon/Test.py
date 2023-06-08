@@ -48,7 +48,7 @@ cv2.destroyAllWindows()
 
 
 # 저장할 이미지 파일 경로
-output_path = 'D:/TeamProject/FirstWebSite/Output/Output.png'
+output_path = "Mosaic\media\mosaic\change.png"
 
 # 이미지 저장
 cv2.imwrite(output_path, img)

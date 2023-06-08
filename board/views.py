@@ -7,6 +7,7 @@ from django.urls import path
 
 import member
 from board.models import Board
+from mosaicImg.models import MosaicImg
 from config import settings
 
 
@@ -15,15 +16,19 @@ def create(request):
     if request.method == "POST":
         board_title = request.POST.get('board_title')
         board_content = request.POST.get('board_content')
-        board_upload = request.FILES.get('board_upload')
+        mos_up = request.FILES.get('mos_up')
         print('board_title : ', board_title)
         print('board_content : ', board_content)
-        print('board_upload : ', board_upload)
+        print('mos_up : ', mos_up)
 
-        if board_title and board_upload:
+        if board_title and mos_up:
             member = request.user
-            board = Board(member=member, board_title=board_title, board_content=board_content, board_upload=board_upload)
+            board = Board(member=member, board_title=board_title, board_content=board_content)
             board.save()
+            board_no = board.board_no
+            print('board_no : ', board_no)
+            mos = MosaicImg(mos_up=mos_up, board_no=board_no)
+            mos.save()
             return redirect('list')
             # return redirect('read', board_no=board.board_no)
         else:
@@ -39,14 +44,15 @@ def create(request):
             'board/create.html'
         )
 
-def mosaic_download(request, board_no):
+def mosaic_download(request, mos_no):
     # mosaic_path = f"media/mosaic/{board_no}.jpg"
+    mos = MosaicImg.objects.get(mos_no=mos_no)
+    board_no = mos.board_no
     mosaic_path = os.path.join(settings.MEDIA_ROOT, 'mosaic', f'mosaic_{board_no}.png')
     mosaic_url = settings.MEDIA_URL + 'mosaic/' + f'mosaic_{board_no}.png'
 
-    board = Board.objects.get(board_no=board_no)
-    board.board_download = mosaic_path
-    board.save()
+    mos.mos_down = mosaic_path
+    mos.save()
 
     return redirect(mosaic_url)
 

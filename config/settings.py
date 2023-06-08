@@ -55,6 +55,7 @@ INSTALLED_APPS = [
     'forum', # 실험용 게시판
     'member',
     'board',
+    'mosaicImg',
 ]
 
 MIDDLEWARE = [

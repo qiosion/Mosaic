@@ -44,17 +44,6 @@ def create(request):
             'board/create.html'
         )
 
-def mosaic_download(request, mos_no):
-    # mosaic_path = f"media/mosaic/{board_no}.jpg"
-    mos = MosaicImg.objects.get(mos_no=mos_no)
-    board_no = mos.board_no
-    mosaic_path = os.path.join(settings.MEDIA_ROOT, 'mosaic', f'mosaic_{board_no}.png')
-    mosaic_url = settings.MEDIA_URL + 'mosaic/' + f'mosaic_{board_no}.png'
-
-    mos.mos_down = mosaic_path
-    mos.save()
-
-    return redirect(mosaic_url)
 
 # urlpatterns = [
 #     path('board/<int:board_id>/mosaic_download/', mosaic_download, name='mosaic_download'),

@@ -8,7 +8,6 @@ profile_face_cascade = cv2.CascadeClassifier('haarcascade_profileface.xml')
 # 이미지 업로드
 img = cv2.imread('fam.jpg')
 
-
 # 이미지를 그레이스케일로 변환
 gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 

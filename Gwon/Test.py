@@ -26,9 +26,9 @@ for (x, y, w, h) in faces:
     roi_color = img[y: y+h, x: x+w]
 
     # 모자이크 처리
-    # roi_color = cv2.blur(roi_color, (50, 50))
-    # img_w_mosaic = img
-    # img_w_mosaic[y: y+h, x: x+w] = roi_color
+    roi_color = cv2.blur(roi_color, (50, 50))
+    img_w_mosaic = img
+    img_w_mosaic[y: y+h, x: x+w] = roi_color
 
     # 눈 찾기
     eye = eye_cascade.detectMultiScale(roi_gray, 1.03, 6)
@@ -41,14 +41,14 @@ for (x, y, w, h) in sideface:
 # exit()
 
 # 영상 출력
-cv2.imshow('image', img)  # img 쓰면 얼굴 검출  img_w_mosaic 쓰면 블러처리 됨
+cv2.imshow('img_w_mosaic', img)  # img 쓰면 얼굴 검출  img_w_mosaic 쓰면 블러처리 됨
 cv2.waitKey(0)
 cv2.destroyAllWindows()
 
 
 
 # 저장할 이미지 파일 경로
-output_path = "Mosaic\media\mosaic\change.png"
+output_path = '../media/mosaic/dd_change_blur.png'
 
 # 이미지 저장
 cv2.imwrite(output_path, img)

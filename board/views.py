@@ -2,7 +2,7 @@ import os
 
 from django.contrib.auth.decorators import login_required
 from django.http import FileResponse, HttpResponse
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import path
 
 import member
@@ -27,7 +27,9 @@ def create(request):
             board.save()
             board_no = board.board_no
             print('board_no : ', board_no)
-            mos = MosaicImg(mos_up=mos_up, board_no=board_no)
+            # mos = MosaicImg(mos_up=mos_up, board_no=board_no)
+            board_instance = get_object_or_404(Board, board_no=board_no)
+            mos = MosaicImg(mos_up=mos_up, board_no=board_instance)
             mos.save()
             return redirect('list')
             # return redirect('read', board_no=board.board_no)

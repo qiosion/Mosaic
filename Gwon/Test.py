@@ -45,21 +45,13 @@ cv2.imshow('image', img)  # img 쓰면 얼굴 검출  img_w_mosaic 쓰면 블러
 cv2.waitKey(0)
 cv2.destroyAllWindows()
 
-def opencv_img_save(img, save_img_path, save_img_name):
-    """
-    ### 처리 이미지 저장 기능
-    :param img: 저장할 이미지
-    :param save_img_path: 이미지 저장 경로
-    :param save_img_name: 저장할 이미지 명
-    """
-    cv2.imwrite(save_img_path + save_img_name, img)
 
 
+# 저장할 이미지 파일 경로
+output_path = 'D:/TeamProject/FirstWebSite/Output/Output.png'
 
-# 샘플 이미지 경로
-origin_image_path ='five.png'
-# 처리된 이미지 저장 경로
-save_image_path = 'D:\TeamProject\FirstWebSite\Test'
+# 이미지 저장
+cv2.imwrite(output_path, img)
 
-# 샘플 이미지 opencv에서 읽기
-origin_image_src = cv2.imread(origin_image_path)
+# 저장된 이미지 확인
+print('이미지 저장 완료!!!!:', output_path)

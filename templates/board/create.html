@@ -7,38 +7,70 @@
     <link rel="stylesheet" href="css.css">
 </head>
 <body>
-<form action="/board/create" method="post" enctype="multipart/form-data">
-    {% csrf_token %}
-    {{error_message}}
     <div class="board_wrap">
         <div class="board_title">
-            <h1>사진 업로드</h1>
-<!--            <p>게시판에 글을 올려주세요.</p> -->
+            <strong>게시판</strong>
+            <p>게시판에 글을 올려주세요.</p>
         </div>
-        <div class="board_write_wrap">
-            <div class="board_write">
+        <div class="board_view_wrap">
+            <div class="board_view">
                 <div class="title">
-                    <dl>
-                        <dt>제목</dt>
-                        <dd><input type="text" placeholder="제목 입력" name="board_title"></dd>
-                    </dl>
+                    {{board.board_title}}
                 </div>
                 <div class="info">
                     <dl>
-                        <dt>파일</dt>
-                        <dd><input type="file"  name="board_upload"></dd>
+                        <dt>번호</dt>
+                        <dd>{{board.board_no}}</dd>
                     </dl>
+                    <dl>
+                        <dt>작성자</dt>
+                        <dd>{{board.id}}</dd>
+                    </dl>
+                    <dl>
+                        <dt>작성일</dt>
+                        <dd>{{board.board_date}}</dd>
+                    </dl>
+<!--                    <dl>-->
+<!--                        <dt>조회</dt>-->
+<!--                        <dd>33</dd>-->
+<!--                    </dl>-->
+                </div>
+
+                <div class="cont">
+                    {{board.board_content}}<br>
                 </div>
                 <div class="cont">
-                    <textarea placeholder="내용 입력" name="board_content"></textarea>
+                    <a href={{board.board_download}} download><button> 파일 다운로드</button></a>
+
                 </div>
             </div>
             <div class="bt_wrap">
-                <button>등록</button>
-                <a href="list.html">취소</a>
+                <a href="list.html" class="on">목록</a>
+                <a href="update.html">수정</a>
+                <a href="" class="off">삭제</a>
             </div>
         </div>
     </div>
-    </form>
+
+
+    <div id="disqus_thread"></div>
+    <script>
+        /**
+        *  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+        *  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables    */
+        /*
+        var disqus_config = function () {
+        this.page.url = PAGE_URL;  // Replace PAGE_URL with your page's canonical URL variable
+        this.page.identifier = PAGE_IDENTIFIER; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+        };
+        */
+        (function() { // DON'T EDIT BELOW THIS LINE
+        var d = document, s = d.createElement('script');
+        s.src = 'https://marmalade-2.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+        })();
+    </script>
+    <noscript><a href="https://disqus.com/?ref_noscript"></a></noscript>
 </body>
 </html>

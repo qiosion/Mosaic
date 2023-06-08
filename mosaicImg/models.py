@@ -5,8 +5,9 @@ from board.models import Board
 def upload_path(instance, filename):
     # 업로드 경로를 동적으로 생성
     # 이 함수는 board_upload 필드에 설정된 업로드 경로와 동일한 경로를 반환
-    print('instance.board_no : ', instance.board_no)
-    return f"uploads/{instance.board_no}.jpg"
+    board_no = str(instance.board_no.board_no).zfill(8)
+    print('board_no.board_no : ', board_no)
+    return f"uploads/{board_no}.jpg"
     # return f"uploads/{filename}"
 
 class MosaicImg(models.Model):

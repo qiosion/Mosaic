@@ -32,8 +32,8 @@ def create(request):
             board_instance = get_object_or_404(Board, board_no=board_no)
             mos = MosaicImg(mos_up=mos_up, board_no=board_instance)
             mos.save()
-            return redirect('list')
-            # return redirect('read', board_no=board.board_no)
+            # return redirect('list')
+            return redirect('read', board_no=board.board_no)
         else:
             error_message = '제목 작성과 업로드할 파일을 첨부를 확인하세요'
             return render(
@@ -75,29 +75,35 @@ def list(request):
     )
 
 def update(request, board_no):
+    board = get_object_or_404(Board, board_no=board_no)
+    mos = get_object_or_404(MosaicImg, board_no=board)
     if request.method == 'POST':
-        result = '실패'
-        board = Board.objects.get(id=id)
-
         try:
-            if form.is_valid():
-                form.save()
-                result = '성공'
-            else:
-                result = form.errors
-        except:
-            result = traceback.format_exc()
-        context = {'result': result}
-        return render(
-            request,
-            'polls/postresult.html',
-            context
-        )
-    else:
-        book = Book.objects.get(id=id)
-        form = BookForm(instance=book)
-        return render(
-            request,
-            'polls/editbook.html',
-            {'form': form}
-        )
+            board_title = request.POST.get('board_title')
+            board_content = request.POST.get('board_content')
+            mos_up = request.FILES.get('mos_up')
+            print('board_title : ', board_title)
+            print('board_content : ', board_content)
+            print('mos_up : ', mos_up)
+
+            if board_title and mos_up:
+                board.board_title = board_title
+                board.board_content = board_content
+                board.save()
+                mos.mos_up = mos_up
+                mos.save()
+                return redirect('read', board_no=board.board_no)
+
+        except Exception as e:
+            error_message = '게시글 업데이트에 실패했습니다.'
+            return render(request,
+                          'board/update.html',
+                          {'board': board, 'mos': mos,
+                           'error_message': error_message})
+    context = {'board': board, 'mos': mos}
+
+    return render(
+        request,
+        'board/update.html',
+        context
+    )

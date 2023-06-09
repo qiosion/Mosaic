@@ -9,13 +9,3 @@ class Migration(migrations.Migration):
     dependencies = [
         ("board", "0003_alter_board_board_download_alter_board_board_upload"),
     ]
-
-    operations = [
-        migrations.AlterField(
-            model_name="board",
-            name="board_download",
-            field=models.CharField(
-                default=board.models.upload_path, max_length=255, null=True
-            ),
-        ),
-    ]

@@ -1,4 +1,5 @@
 import os
+import traceback
 
 from django.contrib.auth.decorators import login_required
 from django.http import FileResponse, HttpResponse
@@ -64,11 +65,39 @@ def read(request, board_no):
     )
 
 def list(request):
-    posts = Board.objects.all().order_by('-board_date')
-    context = { 'posts': posts }
+    board = Board.objects.all().order_by('-board_date')
+    context = { 'board': board }
 
     return render(
         request,
         'board/list.html',
         context
     )
+
+def update(request, board_no):
+    if request.method == 'POST':
+        result = '실패'
+        board = Board.objects.get(id=id)
+
+        try:
+            if form.is_valid():
+                form.save()
+                result = '성공'
+            else:
+                result = form.errors
+        except:
+            result = traceback.format_exc()
+        context = {'result': result}
+        return render(
+            request,
+            'polls/postresult.html',
+            context
+        )
+    else:
+        book = Book.objects.get(id=id)
+        form = BookForm(instance=book)
+        return render(
+            request,
+            'polls/editbook.html',
+            {'form': form}
+        )

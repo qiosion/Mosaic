@@ -51,15 +51,17 @@ def create(request):
 #     path('board/<int:board_id>/mosaic_download/', mosaic_download, name='mosaic_download'),
 # ]
 
-# def read(request, board_no):
-#     post = Board.objects.get(board_no=board_no)
-#     context = { 'post': post }
-#
-#     return render(
-#         request,
-#         'board/read.html',
-#         context
-#     )
+def read(request, board_no):
+    board = Board.objects.get(board_no=board_no)
+    board_instance = get_object_or_404(Board, board_no=board_no)
+    mos = MosaicImg.objects.get(board_no=board_instance)
+    context = { 'board': board, 'mos': mos }
+
+    return render(
+        request,
+        'board/read.html',
+        context
+    )
 
 def list(request):
     posts = Board.objects.all().order_by('-board_date')

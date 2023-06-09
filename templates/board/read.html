@@ -24,7 +24,7 @@
                     </dl>
                     <dl>
                         <dt>작성자</dt>
-                        <dd>{{board.board.id}}</dd>
+                        <dd>{{board.member}}</dd>
                     </dl>
                     <dl>
                         <dt>작성일</dt>
@@ -37,10 +37,11 @@
                 </div>
 
                 <div class="cont">
+                    <img src="{{mos.mos_up.url}}"> <br>
                     {{board.board_content}}<br>
                 </div>
                 <div class="cont">
-                    <a href={{board.board_download}} download><button> 파일 다운로드</button></a>
+                    <a href="{% url 'mosaic_download' mos.mos_no %}" download><button> 파일 다운로드</button></a>
 
                 </div>
             </div>

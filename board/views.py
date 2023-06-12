@@ -1,4 +1,5 @@
 import os
+import traceback
 
 from django.contrib.auth.decorators import login_required
 from django.http import FileResponse, HttpResponse
@@ -31,8 +32,8 @@ def create(request):
             board_instance = get_object_or_404(Board, board_no=board_no)
             mos = MosaicImg(mos_up=mos_up, board_no=board_instance)
             mos.save()
-            return redirect('list')
-            # return redirect('read', board_no=board.board_no)
+            # return redirect('list')
+            return redirect('read', board_no=board.board_no)
         else:
             error_message = '제목 작성과 업로드할 파일을 첨부를 확인하세요'
             return render(
@@ -64,11 +65,45 @@ def read(request, board_no):
     )
 
 def list(request):
-    posts = Board.objects.all().order_by('-board_date')
-    context = { 'posts': posts }
+    board = Board.objects.all().order_by('-board_date')
+    context = { 'board': board }
 
     return render(
         request,
         'board/list.html',
+        context
+    )
+
+def update(request, board_no):
+    board = get_object_or_404(Board, board_no=board_no)
+    mos = get_object_or_404(MosaicImg, board_no=board)
+    if request.method == 'POST':
+        try:
+            board_title = request.POST.get('board_title')
+            board_content = request.POST.get('board_content')
+            mos_up = request.FILES.get('mos_up')
+            print('board_title : ', board_title)
+            print('board_content : ', board_content)
+            print('mos_up : ', mos_up)
+
+            if board_title and mos_up:
+                board.board_title = board_title
+                board.board_content = board_content
+                board.save()
+                mos.mos_up = mos_up
+                mos.save()
+                return redirect('read', board_no=board.board_no)
+
+        except Exception as e:
+            error_message = '게시글 업데이트에 실패했습니다.'
+            return render(request,
+                          'board/update.html',
+                          {'board': board, 'mos': mos,
+                           'error_message': error_message})
+    context = {'board': board, 'mos': mos}
+
+    return render(
+        request,
+        'board/update.html',
         context
     )

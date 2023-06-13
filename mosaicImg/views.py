@@ -9,21 +9,23 @@ from mosaicImg.models import MosaicImg
 def mosaic_download(request, mos_no):
     # mosaic_path = f"media/mosaic/{board_no}.jpg"
     mos = MosaicImg.objects.get(mos_no=mos_no)
-    # board_no = mos.board_no
-    board_no = str(mos.board_no.board_no).zfill(8)
-    print('여기 : ', board_no)
-    mosaic_path = os.path.join(settings.MEDIA_ROOT, 'mosaic', f'mosaic_{board_no}.jpg')
-    print('mosaic_path 는 ' , mosaic_path)
-    mosaic_url = settings.MEDIA_URL + 'mosaic/' + f'mosaic_{board_no}.jpg'
-    print('mosaic_url 는 ' , mosaic_url)
 
-    mos.mos_down = mosaic_path
-    mos.save()
+    board_no = str(mos.board_no.board_no).zfill(8)
+    mosaic_path = os.path.join(settings.MEDIA_ROOT, 'mosaic', f'mosaic_{board_no}.jpg')
+    mosaic_url = settings.MEDIA_URL + 'mosaic/' + f'mosaic_{board_no}.jpg'
 
     return redirect(mosaic_url)
 
 
-def get_mosaic_haar(input_path, output_path):
+def get_mosaic_haar(request, mos_no):
+    mos = MosaicImg.objects.get(mos_no=mos_no)
+    board_no = str(mos.board_no.board_no).zfill(8)
+
+    # input_path = 'uploads/{board_no}.jpg'
+    print("지금 board_no는 : ", board_no)
+    input_path = os.path.join(settings.MEDIA_ROOT, 'uploads', f'{board_no}.jpg')
+
+
     # haarcascade 불러오기
     face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')
     sideface_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_profileface.xml')
@@ -60,10 +62,11 @@ def get_mosaic_haar(input_path, output_path):
         cv2.destroyAllWindows()
 
     # 이미지 저장
+    output_path = os.path.join(settings.MEDIA_ROOT, 'mosaic', f'mosaic_{board_no}.jpg')
+    os.makedirs(os.path.dirname(output_path), exist_ok=True) # 저장 디렉터리 확인
     cv2.imwrite(output_path, img)
     print('이미지 저장 완료:', output_path)
 
-# 함수 호출 예시
-input_path = 'media/uploads/pp.jpg'
-output_path = 'media/mosaic/pp_change.jpg'
-detect_and_mosaic_faces(input_path, output_path)
+    # DB에 저장
+    mos.mos_down = f"mosaic/mosaic_{board_no}.jpg"
+    mos.save()

@@ -9,6 +9,7 @@ from django.urls import path
 import member
 from board.models import Board
 from mosaicImg.models import MosaicImg
+from mosaicImg.views import get_mosaic_haar
 from config import settings
 
 
@@ -32,6 +33,7 @@ def create(request):
             board_instance = get_object_or_404(Board, board_no=board_no)
             mos = MosaicImg(mos_up=mos_up, board_no=board_instance)
             mos.save()
+            get_mosaic_haar(request, mos.mos_no)
             # return redirect('list')
             return redirect('read', board_no=board.board_no)
         else:
@@ -56,6 +58,8 @@ def read(request, board_no):
     board = Board.objects.get(board_no=board_no)
     board_instance = get_object_or_404(Board, board_no=board_no)
     mos = MosaicImg.objects.get(board_no=board_instance)
+    print("read 하면 mos_up : ", mos.mos_up)
+    print("read 하면 mos_down : ", mos.mos_down)
     context = { 'board': board, 'mos': mos }
 
     return render(

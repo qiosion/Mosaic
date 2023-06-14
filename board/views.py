@@ -96,7 +96,7 @@ def update(request, board_no):
                 board.save()
                 mos.mos_up = mos_up
                 mos.save()
-                return redirect('read', board_no=board.board_no)
+                return render('board/read.html', board_no=board.board_no)
 
         except Exception as e:
             error_message = '게시글 업데이트에 실패했습니다.'
@@ -104,10 +104,26 @@ def update(request, board_no):
                           'board/update.html',
                           {'board': board, 'mos': mos,
                            'error_message': error_message})
-    context = {'board': board, 'mos': mos}
+    elif request.method == "GET":
+        context = {'board': board, 'mos': mos}
+        board_title = request.POST.get('board_title')
+        board_content = request.POST.get('board_content')
+        mos_up = request.FILES.get('mos_up')
+        return render(
+            request,
+            'board/update.html',
+            context
+        )
 
-    return render(
-        request,
-        'board/update.html',
-        context
-    )
+def delete(request, board_no):
+    board = get_object_or_404(Board, board_no=board_no)
+    if request.method == 'POST':
+        try:
+            board.delete()
+        except Exception as e:
+            error_message = '게시글 삭제에 실패했습니다.'
+            return render(request,
+                          'board/read.html',
+                          {'board': board,
+                           'error_message': error_message})
+    return redirect('list')

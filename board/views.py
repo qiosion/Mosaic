@@ -1,12 +1,15 @@
 import os
+import traceback
 
 from django.contrib.auth.decorators import login_required
 from django.http import FileResponse, HttpResponse
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import path
 
 import member
 from board.models import Board
+from mosaicImg.models import MosaicImg
+from mosaicImg.views import get_mosaic_haar
 from config import settings
 
 
@@ -15,17 +18,24 @@ def create(request):
     if request.method == "POST":
         board_title = request.POST.get('board_title')
         board_content = request.POST.get('board_content')
-        board_upload = request.FILES.get('board_upload')
+        mos_up = request.FILES.get('mos_up')
         print('board_title : ', board_title)
         print('board_content : ', board_content)
-        print('board_upload : ', board_upload)
+        print('mos_up : ', mos_up)
 
-        if board_title and board_upload:
+        if board_title and mos_up:
             member = request.user
-            board = Board(member=member, board_title=board_title, board_content=board_content, board_upload=board_upload)
+            board = Board(member=member, board_title=board_title, board_content=board_content)
             board.save()
-            return redirect('list')
-            # return redirect('read', board_no=board.board_no)
+            board_no = board.board_no
+            print('board_no : ', board_no)
+            # mos = MosaicImg(mos_up=mos_up, board_no=board_no)
+            board_instance = get_object_or_404(Board, board_no=board_no)
+            mos = MosaicImg(mos_up=mos_up, board_no=board_instance)
+            mos.save()
+            get_mosaic_haar(request, mos.mos_no)
+            # return redirect('list')
+            return redirect('read', board_no=board.board_no)
         else:
             error_message = '제목 작성과 업로드할 파일을 첨부를 확인하세요'
             return render(
@@ -39,37 +49,65 @@ def create(request):
             'board/create.html'
         )
 
-def mosaic_download(request, board_no):
-    # mosaic_path = f"media/mosaic/{board_no}.jpg"
-    mosaic_path = os.path.join(settings.MEDIA_ROOT, 'mosaic', f'mosaic_{board_no}.png')
-    mosaic_url = settings.MEDIA_URL + 'mosaic/' + f'mosaic_{board_no}.png'
-
-    board = Board.objects.get(board_no=board_no)
-    board.board_download = mosaic_path
-    board.save()
-
-    return redirect(mosaic_url)
 
 # urlpatterns = [
 #     path('board/<int:board_id>/mosaic_download/', mosaic_download, name='mosaic_download'),
 # ]
 
-# def read(request, board_no):
-#     post = Board.objects.get(board_no=board_no)
-#     context = { 'post': post }
-#
-#     return render(
-#         request,
-#         'board/read.html',
-#         context
-#     )
+def read(request, board_no):
+    board = Board.objects.get(board_no=board_no)
+    board_instance = get_object_or_404(Board, board_no=board_no)
+    mos = MosaicImg.objects.get(board_no=board_instance)
+    print("read 하면 mos_up : ", mos.mos_up)
+    print("read 하면 mos_down : ", mos.mos_down)
+    context = { 'board': board, 'mos': mos }
+
+    return render(
+        request,
+        'board/read.html',
+        context
+    )
 
 def list(request):
-    posts = Board.objects.all().order_by('-board_date')
-    context = { 'posts': posts }
+    board = Board.objects.all().order_by('-board_date')
+    context = { 'board': board }
 
     return render(
         request,
         'board/list.html',
+        context
+    )
+
+def update(request, board_no):
+    board = get_object_or_404(Board, board_no=board_no)
+    mos = get_object_or_404(MosaicImg, board_no=board)
+    if request.method == 'POST':
+        try:
+            board_title = request.POST.get('board_title')
+            board_content = request.POST.get('board_content')
+            mos_up = request.FILES.get('mos_up')
+            print('board_title : ', board_title)
+            print('board_content : ', board_content)
+            print('mos_up : ', mos_up)
+
+            if board_title and mos_up:
+                board.board_title = board_title
+                board.board_content = board_content
+                board.save()
+                mos.mos_up = mos_up
+                mos.save()
+                return redirect('read', board_no=board.board_no)
+
+        except Exception as e:
+            error_message = '게시글 업데이트에 실패했습니다.'
+            return render(request,
+                          'board/update.html',
+                          {'board': board, 'mos': mos,
+                           'error_message': error_message})
+    context = {'board': board, 'mos': mos}
+
+    return render(
+        request,
+        'board/update.html',
         context
     )

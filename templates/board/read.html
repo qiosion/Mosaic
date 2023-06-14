@@ -24,7 +24,7 @@
                     </dl>
                     <dl>
                         <dt>작성자</dt>
-                        <dd>{{board.id}}</dd>
+                        <dd>{{board.member}}</dd>
                     </dl>
                     <dl>
                         <dt>작성일</dt>
@@ -37,10 +37,11 @@
                 </div>
 
                 <div class="cont">
+                    <img src="{{mos.mos_down.url}}"> <br>
                     {{board.board_content}}<br>
                 </div>
                 <div class="cont">
-                    <a href={{board.board_download}} download><button> 파일 다운로드</button></a>
+                    <a href="{% url 'mosaic_download' mos.mos_no %}" download><button> 파일 다운로드</button></a>
 
                 </div>
             </div>
@@ -74,3 +75,4 @@
     <noscript><a href="https://disqus.com/?ref_noscript"></a></noscript>
 </body>
 </html>
+

@@ -4,7 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>게시판</title>
-    <link rel="stylesheet" href="css.css">
+    {% load static %}
+    <link rel="stylesheet" href="{% 'css.css' %}">
 </head>
 <body>
 <form action="/board/create" method="post" enctype="multipart/form-data">
@@ -40,5 +41,7 @@
         </div>
     </div>
     </form>
+    {% block content %}
+    {% endblock %}
 </body>
 </html>

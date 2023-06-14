@@ -4,7 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>게시판</title>
-    <link rel="stylesheet" href="css.css">
+    {% load static %}
+    <link rel="stylesheet" href="{% 'css.css' %}">
 </head>
 <body>
     <div class="board_wrap">
@@ -46,9 +47,9 @@
                 </div>
             </div>
             <div class="bt_wrap">
-                <a href="list.html" class="on">목록</a>
-                <a href="update.html">수정</a>
-                <a href="" class="off">삭제</a>
+                <a href="{% url 'list' %}" class="on">목록</a>
+                <a href="{% url 'update' board_no=board.board_no %}">수정</a>
+                <a href="{% url 'delete' board_no=board.board_no %}" class="off">삭제</a>
             </div>
         </div>
     </div>
@@ -73,6 +74,7 @@
         })();
     </script>
     <noscript><a href="https://disqus.com/?ref_noscript"></a></noscript>
+    {% block content %}
+    {% endblock %}
 </body>
 </html>
-

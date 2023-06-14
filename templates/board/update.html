@@ -4,7 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>게시판</title>
-    <link rel="stylesheet" href="css.css">
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css.css' %}">
 </head>
 <body>
     <div class="board_wrap">
@@ -37,5 +38,7 @@
             </div>
         </div>
     </div>
+    {% block content %}
+    {% endblock %}
 </body>
 </html>

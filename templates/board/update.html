@@ -23,7 +23,7 @@
                 <div class="info">
                     <dl>
                         <dt>파일</dt>
-                        <dd><input type="file"  name="board_upload"></dd>
+                        <dd><input type="file" value="{{mos.mos_up}}" name="mos_up"></dd>
                     </dl>
                 </div>
                 <div class="cont">
@@ -33,8 +33,8 @@
                 </div>
             </div>
             <div class="bt_wrap">
-                <a href="read.html" class="on">수정</a>
-                <a href="read.html">취소</a>
+                <a href="{% url 'update' board_no=board.board_no %}" class="on">수정</a>
+                <a href="{% url 'read' board_no=board.board_no %}">취소</a>
             </div>
         </div>
     </div>

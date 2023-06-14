@@ -81,15 +81,12 @@ def list(request):
 def update(request, board_no):
     board = get_object_or_404(Board, board_no=board_no)
     mos = get_object_or_404(MosaicImg, board_no=board)
+    board_title = request.POST.get('board_title')
+    board_content = request.POST.get('board_content')
+    mos_up = request.FILES.get('mos_up')
+
     if request.method == 'POST':
         try:
-            board_title = request.POST.get('board_title')
-            board_content = request.POST.get('board_content')
-            mos_up = request.FILES.get('mos_up')
-            print('board_title : ', board_title)
-            print('board_content : ', board_content)
-            print('mos_up : ', mos_up)
-
             if board_title and mos_up:
                 board.board_title = board_title
                 board.board_content = board_content
@@ -97,18 +94,14 @@ def update(request, board_no):
                 mos.mos_up = mos_up
                 mos.save()
                 return render('board/read.html', board_no=board.board_no)
-
         except Exception as e:
             error_message = '게시글 업데이트에 실패했습니다.'
             return render(request,
                           'board/update.html',
                           {'board': board, 'mos': mos,
                            'error_message': error_message})
-    elif request.method == "GET":
+    elif request.method == 'GET':
         context = {'board': board, 'mos': mos}
-        board_title = request.POST.get('board_title')
-        board_content = request.POST.get('board_content')
-        mos_up = request.FILES.get('mos_up')
         return render(
             request,
             'board/update.html',

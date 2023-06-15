@@ -8,6 +8,10 @@
     <link rel="stylesheet" href="{% static "css.css" %}">
 </head>
 <body>
+    <header>
+        <link rel="stylesheet" type="text/css" href="{% static "index.css" %}">
+    {% include 'navbar.html' %}
+    </header>
     <div class="board_wrap">
         <div class="board_title">
             <strong>모자이크 게시판</strong>

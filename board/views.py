@@ -10,6 +10,7 @@ import member
 from board.models import Board
 from mosaicImg.models import MosaicImg
 from mosaicImg.views import get_mosaic_haar
+from mosaicImg.views import get_shuffle_img
 from config import settings
 
 
@@ -19,6 +20,8 @@ def create(request):
         board_title = request.POST.get('board_title')
         board_content = request.POST.get('board_content')
         mos_up = request.FILES.get('mos_up')
+        selected_type = request.POST.get('type')
+        print('selected_type : ', selected_type)
 
         if board_title and mos_up:
             member = request.user
@@ -28,7 +31,10 @@ def create(request):
             board_instance = get_object_or_404(Board, board_no=board_no)
             mos = MosaicImg(mos_up=mos_up, board_no=board_instance)
             mos.save()
-            get_mosaic_haar(request, mos.mos_no)
+            if selected_type == 'harr':
+                get_mosaic_haar(request, mos.mos_no)
+            elif selected_type == 'shuffle':
+                get_shuffle_img(request, mos.mos_no)
             return redirect('read', board_no=board.board_no)
         else:
             error_message = '제목 작성과 업로드할 파일을 첨부를 확인하세요'

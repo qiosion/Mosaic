@@ -5,6 +5,11 @@ from django.shortcuts import render, redirect
 from config import settings
 from mosaicImg.models import MosaicImg
 
+import random
+
+from PIL import Image
+import os
+
 
 def mosaic_download(request, mos_no):
     mos = MosaicImg.objects.get(mos_no=mos_no)
@@ -68,3 +73,59 @@ def get_mosaic_haar(request, mos_no):
     # DB에 저장
     mos.mos_down = f"mosaic/mosaic_{board_no}.jpg"
     mos.save()
+
+def get_shuffle_img(request, mos_no):
+    mos = MosaicImg.objects.get(mos_no=mos_no)
+    board_no = str(mos.board_no.board_no).zfill(8)
+
+    input_path = os.path.join(settings.MEDIA_ROOT, 'uploads', f'{board_no}.jpg')
+    print("input_path : ", input_path)
+    #
+    # mos_up = './img/[Sample]Jisoo.jpg'
+
+    pieces = split_image(input_path)
+    shuffled_pieces = shuffle_pieces(pieces)
+    combined_image = combine_pieces(shuffled_pieces)
+
+    # piece_down = './down'
+    # os.makedirs(piece_down, exist_ok=True)
+    # output_path = os.path.join(piece_down, 'pieced_img.jpg')
+    output_path = os.path.join(settings.MEDIA_ROOT, 'mosaic', f'mosaic_{board_no}.jpg')
+    os.makedirs(os.path.dirname(output_path), exist_ok=True)  # 저장 디렉터리 확인
+
+    combined_image.save(output_path)
+    # DB에 저장
+    mos.mos_down = f"mosaic/mosaic_{board_no}.jpg"
+    mos.save()
+
+def split_image(input_path):
+    image = Image.open(input_path)
+
+    width, height = image.size
+
+    piece_width = width // 20
+    piece_height = height // 20
+
+    pieces = []
+    for y in range(0, height, piece_height):
+        for x in range(0, width, piece_width):
+            # 조각이미지 생성
+            piece = image.crop((x, y, x + piece_width, y + piece_height))
+            pieces.append(piece)
+    return pieces
+
+def shuffle_pieces(pieces):
+    random.shuffle(pieces)
+    return pieces
+
+def combine_pieces(pieces):
+    width = pieces[0].width
+    height = pieces[0].height
+    combined_img = Image.new('RGB', (width * 20, height * 20))
+
+    for i, piece in enumerate(pieces):
+        x = (i % 20) * width
+        y = (i // 20) * height
+        combined_img.paste(piece, (x, y))
+
+    return combined_img

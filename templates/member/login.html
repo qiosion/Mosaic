@@ -9,6 +9,10 @@
     <title>login</title>
 </head>
 <body>
+    <header>
+        <link rel="stylesheet" href="{% static 'index.css' %}">
+    {% include 'navbar.html' %}
+    </header>
     <div class="login-wrapper">
         <h2>Login</h2>
         <form method="post" action="/member/login" id="login-form">

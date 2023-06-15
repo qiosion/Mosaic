@@ -33,13 +33,20 @@
                         <dt>파일</dt>
                         <dd><input type="file"  name="mos_up"></dd>
                     </dl>
+                    <dl>
+                        <dt>모자이크 형식</dt>
+                        <dd>
+                            <input type="radio" name="type" value="harr" checked>기본 모자이크
+                            <input type="radio" name="type" value="shuffle">이미지 섞기
+                        </dd>
+                    </dl>
                 </div>
                 <div class="cont">
                     <textarea placeholder="내용 입력" name="board_content"></textarea>
                 </div>
             </div>
             <div class="bt_wrap">
-                <button>등록</button>
+                <button type="submit">등록</button>
                 <a href="{% url 'list' %}">취소</a>
             </div>
         </div>

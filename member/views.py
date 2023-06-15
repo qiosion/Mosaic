@@ -75,3 +75,11 @@ def logout(request):
     auth_logout(request)
     # return redirect('/forum/list')
     return redirect('index')
+
+def delete(request):
+    if request.method == "POST":
+        user = request.user
+        user.delete()
+        logout(request)
+        return redirect('index')
+    return render(request, '')

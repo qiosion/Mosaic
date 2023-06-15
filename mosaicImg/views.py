@@ -7,7 +7,6 @@ from mosaicImg.models import MosaicImg
 
 
 def mosaic_download(request, mos_no):
-    # mosaic_path = f"media/mosaic/{board_no}.jpg"
     mos = MosaicImg.objects.get(mos_no=mos_no)
 
     board_no = str(mos.board_no.board_no).zfill(8)
@@ -21,10 +20,8 @@ def get_mosaic_haar(request, mos_no):
     mos = MosaicImg.objects.get(mos_no=mos_no)
     board_no = str(mos.board_no.board_no).zfill(8)
 
-    # input_path = 'uploads/{board_no}.jpg'
-    print("지금 board_no는 : ", board_no)
     input_path = os.path.join(settings.MEDIA_ROOT, 'uploads', f'{board_no}.jpg')
-
+    print("input_path : ", input_path)
 
     # haarcascade 불러오기
     face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')

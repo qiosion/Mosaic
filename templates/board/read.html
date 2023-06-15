@@ -39,6 +39,7 @@
                 <div class="cont">
                     <img src="{{mos.mos_down.url}}"> <br>
                     {{board.board_content}}<br>
+                        {{error_message}}
                 </div>
                 <div class="cont">
                     <a href="{% url 'mosaic_download' mos.mos_no %}" download><button> 파일 다운로드</button></a>
@@ -47,8 +48,8 @@
             </div>
             <div class="bt_wrap">
                 <a href="{% url 'list' %}" class="on">목록</a>
-                <a href="{% url 'update' board_no=board.board_no %}">수정</a>
-                <a href="{% url 'delete' board_no=board.board_no %}" class="off">삭제</a>
+                <a href="{% url 'update' board.board_no %}">수정</a>
+                <a href="{% url 'delete' board.board_no %}" class="off">삭제</a>
             </div>
         </div>
     </div>

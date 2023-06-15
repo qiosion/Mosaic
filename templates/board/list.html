@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>게시판</title>
     {% load static %}
-    <link rel="stylesheet" href="{% 'css.css' %}">
+    <link rel="stylesheet" href="{% static "css.css" %}">
 </head>
 <body>
     <div class="board_wrap">
@@ -22,7 +22,7 @@
                     <div class="date">작성일</div>
 <!--                    <div class="count">조회수</div>-->
                 </div>
-                {% for row in data %}
+                {% for list in data %}
                 <div>
                     <div class="num">{{board.board_no}}</div>
                     <div class="title"><a href="read.html">{{board.board_title}}</a></div>

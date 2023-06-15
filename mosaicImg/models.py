@@ -18,6 +18,10 @@ class MosaicImg(models.Model):
     mos_up = models.FileField(null=False, upload_to=upload_path)
     mos_down = models.FileField(max_length=255, null=True, upload_to=download_path)
     board_no = models.ForeignKey(Board, on_delete=models.CASCADE, default=None)
+    # def delete(self, *args, **kwargs):
+    #     if self.mos_up:
+    #         os.remove(os.path.join(settings.MEDIA_ROOT, self.mos_up.path))
+    #     super(MosaicImg, self).delete(*args, **kwargs)
 
     class Meta:
         db_table = "MosaicImg"

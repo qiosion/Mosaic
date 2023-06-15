@@ -33,6 +33,7 @@ def get_mosaic_haar(request, mos_no):
 
     # 이미지 불러오기
     img = cv2.imread(input_path)
+    print("img : ", img)
     gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 
     # 얼굴 찾기

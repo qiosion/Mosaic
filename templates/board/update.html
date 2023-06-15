@@ -8,6 +8,10 @@
     <link rel="stylesheet" href="{% static "css.css" %}">
 </head>
 <body>
+    <header>
+        <link rel="stylesheet" type="text/css" href="{% static "index.css" %}">
+    {% include 'navbar.html' %}
+    </header>
 <form action="{% url 'update' board.board_no %}" method="post" enctype="multipart/form-data">
     {% csrf_token %}
     {{error_message}}

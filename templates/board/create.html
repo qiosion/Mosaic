@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>게시판</title>
     {% load static %}
-    <link rel="stylesheet" href="{% 'css.css' %}">
+    <link rel="stylesheet" href="{% static "css.css" %}">
 </head>
 <body>
 <form action="/board/create" method="post" enctype="multipart/form-data">
@@ -36,7 +36,7 @@
             </div>
             <div class="bt_wrap">
                 <button>등록</button>
-                <a href="list.html">취소</a>
+                <a href="{% url 'list' %}">취소</a>
             </div>
         </div>
     </div>

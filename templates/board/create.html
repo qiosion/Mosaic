@@ -8,7 +8,11 @@
     <link rel="stylesheet" href="{% static "css.css" %}">
 </head>
 <body>
-<form action="/board/create" method="post" enctype="multipart/form-data">
+<header>
+    <link rel="stylesheet" type="text/css" href="{% static "index.css" %}">
+{% include 'navbar.html' %}
+</header>
+<form action="{% url 'create' %}" method="post" enctype="multipart/form-data">
     {% csrf_token %}
     {{error_message}}
     <div class="board_wrap">

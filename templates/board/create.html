@@ -3,12 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>게시판</title>
+    <title>모자이크 게시판</title>
     {% load static %}
     <link rel="stylesheet" href="{% static "css.css" %}">
 </head>
 <body>
-<form action="/board/create" method="post" enctype="multipart/form-data">
+<form action="{% url 'create' %}" method="post" enctype="multipart/form-data">
     {% csrf_token %}
     {{error_message}}
     <div class="board_wrap">

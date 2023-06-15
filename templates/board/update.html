@@ -3,11 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>게시판</title>
+    <title>모자이크 게시판</title>
     {% load static %}
     <link rel="stylesheet" href="{% static "css.css" %}">
 </head>
 <body>
+<form action="{% url 'update' board.board_no %}" method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{error_message}}
     <div class="board_wrap">
         <div class="board_title">
            <h1>수정</h1>
@@ -23,22 +26,31 @@
                 <div class="info">
                     <dl>
                         <dt>파일</dt>
-                        <dd><input type="file" value="{{mos.mos_up}}" name="mos_up"></dd>
+                        <dd>
+                            <input type="file" name="mos_up">
+                        </dd>
                     </dl>
                 </div>
                 <div class="cont">
                     <textarea placeholder="내용 입력" name="board_content">
-{{board.board_content}}
+                        {{board.board_content}}
                     </textarea>
                 </div>
             </div>
             <div class="bt_wrap">
-                <a href="{% url 'update' board_no=board.board_no %}" class="on">수정</a>
+                <input type="checkbox" id="fileChangeCheck" name="fileChange" style="display: none;">
+                <button class="on">수정</button>
                 <a href="{% url 'read' board_no=board.board_no %}">취소</a>
             </div>
         </div>
     </div>
+</form>
     {% block content %}
     {% endblock %}
+<script type = "text/javascript">
+    $('form').submit( function() {
+        $('#fileChangeCheck').prop("checked",true)
+    });
+</script>
 </body>
 </html>

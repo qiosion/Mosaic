@@ -86,14 +86,24 @@ def update(request, board_no):
     mos_up = request.FILES.get('mos_up')
 
     if request.method == 'POST':
+    #     board_title = request.POST.get('board_title')
+    #     board_content = request.POST.get('board_content')
+    #     mos_up = request.FILES.get('mos_up')
+    #     file_change_check = request.POST.get('fileChange', False)
+    #
+    #     if file_change_check:
+    #         # os.remove(os.path.join(settings.MEDIA_ROOT, mos.mos_up.path))
         try:
             if board_title and mos_up:
                 board.board_title = board_title
+                # print("board.board_title : ", board.board_title)
                 board.board_content = board_content
+                # print("board.board_content : ", board.board_content)
                 board.save()
                 mos.mos_up = mos_up
+                print("mos.mos_up : ", mos.mos_up)
                 mos.save()
-                return render('board/read.html', board_no=board.board_no)
+                return redirect('read', board_no=board.board_no)
         except Exception as e:
             error_message = '게시글 업데이트에 실패했습니다.'
             return render(request,
@@ -102,6 +112,8 @@ def update(request, board_no):
                            'error_message': error_message})
     elif request.method == 'GET':
         context = {'board': board, 'mos': mos}
+        # if mos.mos_up:
+        #     context['mos_up'] = mos.mos_up
         return render(
             request,
             'board/update.html',

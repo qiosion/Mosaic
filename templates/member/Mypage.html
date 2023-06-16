@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'index.css' %}">
+</head>
+    <header>
+        <link rel="stylesheet" href="{% static 'index.css' %}">
+    {% include 'navbar.html' %}
+    </header>
+<body>
+<!-- 폰트어썸 불러오기 -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
+<!-- 반응형 필수 -->
+<meta name="viewport" content="width=device-width, user-scalable=no" />
+<!-- 제이쿼리 불러오기 -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<!-- 사이트 박스 시작 -->
+<section class="site-box min-height-100vh flex flex-column">
+  <!-- 메인 컨텐츠 박스 시작 -->
+  <main class="main-box flex-grow-1 visible-md-up">
+    <section class="main-box-section con">
+
+
+      <!-- 회원정보 페이지 시작 -->
+      <div class="section-MyPage min-height-50vh flex flex-jc-c flex-ai-c ">
+        <form name="form" onsubmit="check(this); return false;" action="doModifyInfo" method="POST">
+          <input type="hidden" name="id" value="${loginedMember.id}">
+          <input type="hidden" name="loginPwReal">
+          <div class="section-MyPage-body flex flex-jc-c flex-ai-c">
+            <div class="section-MyPage-body__cell">
+              <div class="MyPage_cell__title">
+                <span>회원번호</span>
+                <div class="MyPage_cell__body">
+                  <span>5</span>
+                </div>
+              </div>
+              <div class="MyPage_cell__title">
+                <span>회원ID</span>
+                <div class="MyPage_cell__body">
+                  <span>${loginedMember.loginId}</span>
+                </div>
+              </div>
+              <div class=MyPage_cell__title>
+                <span>Password</span>
+                <div class=MyPage_cell__body>
+                  <input type="password" name="loginPw" maxlength="50" placeholder="PW 입력">
+                </div>
+              </div>
+              <div class=MyPage_cell__title>
+                <span>Password Check</span>
+                <div class=MyPage_cell__body>
+                  <input type="password" name="loginPwConfirm" maxlength="50" placeholder="PW 확인">
+                </div>
+              </div>
+              <div class="MyPage_cell__title">
+                <span>회원이름</span>
+                <div class=MyPage_cell__body>
+                  <input type="text" name="name" value="${loginedMember.name}">
+                </div>
+              </div>
+            </div>
+            <div class="section-MyPage-body__cell">
+              <div class="MyPage_cell__title">
+                <span>닉네임</span>
+                <div class="MyPage_cell__body">
+                  <input type="text" name="nickname" placeholder="${loginedMember.nickname}">
+                  <button class="btn btn-check" name="dupNickCheck" onclick="checkDupNick(this);" type="button"><i class="far fa-check-circle"></i> 중복체크</button>
+                </div>
+              </div>
+              <div class=MyPage_cell__title>
+                <span>e-mail</span>
+                <div class=MyPage_cell__body>
+                  <input type="email" name="email" value="${loginedMember.email}">
+                </div>
+              </div>
+              <div class=MyPage_cell__title>
+                <span>연락처</span>
+                <div class=MyPage_cell__body>
+                  <input type="number" name="cellphoneNo" value="${loginedMember.cellphoneNo}">
+                </div>
+              </div>
+              <div class=MyPage_cell__title>
+                <span>회원등급</span>
+                <div class=MyPage_cell__body>
+                  <span>${loginedMember.authLevel}</span>
+                </div>
+              </div>
+              <div class=MyPage_cell__title>
+                <span>회원가입일</span>
+                <div class=MyPage_cell__body>
+                  <span>${loginedMember.regDate}</span>
+                </div>
+              </div>
+              <div class="section-MyPage-body__option flex flex-jc-fe flex-ai-fe">
+                <button class="submitModifyBtn btn btn-go" type="submit" onclick="if(confirm('정말 변경하시겠습니까?') == false) {return false;}"><i class="far fa-edit"></i> 변경</button>
+                <button class="cleModifyBtn btn btn-back" type="button" onclick="history.back();"><i class="fas fa-undo"></i> 취소</button>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+      <!-- 회원정보 페이지 끝 -->
+    </section>
+  </main>
+  <!-- 메인 컨텐츠 박스 끝 -->
+</section>
+<!-- 사이트 박스 끝 -->
+<!--<script src="test.js"></script>-->
+    {% block content %}
+    {% endblock %}
+</body>
+</html>

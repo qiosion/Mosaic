@@ -83,3 +83,20 @@ def delete(request):
         logout(request)
         return redirect('index')
     return render(request, '')
+
+def update(request):
+    if request.method == "POST":
+        user = request.user
+
+        new_pw = request.POST.get('password')
+        email1 = request.POST.get('email1')
+        email2 = request.POST.get('email2')
+        new_em = f"{email1}@{email2}"
+
+        user.email = new_em
+        user.set_password(new_pw)
+        user.save()
+        return redirect('mypage')
+    elif request.method == "GET":
+        user = request.user
+        return render(request, 'member/Mypage.html', {'user': user})

@@ -19,7 +19,7 @@
         <form class="btn btn-primary">
 
             {% if user.is_authenticated %}
-            <button type="button" class="btn btn-primary" onclick="location.href=#">Mypage</button>
+            <button type="button" class="btn btn-primary" onclick="location.href='{% url 'mypage' %}'">Mypage</button>
             <button type="button" class="btn btn-primary" onclick="location.href='{% url 'logout' %}'">log out</button>
             {% else %}
             <button type="button" class="btn btn-primary" onclick="location.href='{% url 'signup' %}'">sign up</button>

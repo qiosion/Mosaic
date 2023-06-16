@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     {% load static %}
-    <link rel="stylesheet" href="{% static 'index.css' %}">
+    <link rel="stylesheet" href="{% static 'Mypage.css' %}">
 </head>
     <header>
         <link rel="stylesheet" href="{% static 'index.css' %}">
@@ -27,76 +27,63 @@
 
       <!-- 회원정보 페이지 시작 -->
       <div class="section-MyPage min-height-50vh flex flex-jc-c flex-ai-c ">
-        <form name="form" onsubmit="check(this); return false;" action="doModifyInfo" method="POST">
-          <input type="hidden" name="id" value="${loginedMember.id}">
-          <input type="hidden" name="loginPwReal">
+        <form action="doModifyInfo" method="POST">
+<!--          form 에 들어갈 것 onsubmit="check(this); return false;"-->
           <div class="section-MyPage-body flex flex-jc-c flex-ai-c">
             <div class="section-MyPage-body__cell">
-              <div class="MyPage_cell__title">
-                <span>회원번호</span>
-                <div class="MyPage_cell__body">
-                  <span>5</span>
-                </div>
-              </div>
+<!--              <div class="MyPage_cell__title">-->
+<!--                <span>회원번호</span>-->
+<!--                <div class="MyPage_cell__body">-->
+<!--                  <span>{{mypage.id}}</span>-->
+<!--                </div>-->
+<!--              </div>-->
               <div class="MyPage_cell__title">
                 <span>회원ID</span>
                 <div class="MyPage_cell__body">
-                  <span>${loginedMember.loginId}</span>
+                  <span>{{mypage.username}}</span>
                 </div>
               </div>
               <div class=MyPage_cell__title>
                 <span>Password</span>
                 <div class=MyPage_cell__body>
-                  <input type="password" name="loginPw" maxlength="50" placeholder="PW 입력">
+                  <input type="password" name="password" maxlength="50" placeholder="PW 입력">
                 </div>
               </div>
               <div class=MyPage_cell__title>
                 <span>Password Check</span>
                 <div class=MyPage_cell__body>
-                  <input type="password" name="loginPwConfirm" maxlength="50" placeholder="PW 확인">
-                </div>
-              </div>
-              <div class="MyPage_cell__title">
-                <span>회원이름</span>
-                <div class=MyPage_cell__body>
-                  <input type="text" name="name" value="${loginedMember.name}">
+                  <input type="password" maxlength="50" placeholder="PW 확인">
                 </div>
               </div>
             </div>
             <div class="section-MyPage-body__cell">
               <div class="MyPage_cell__title">
-                <span>닉네임</span>
-                <div class="MyPage_cell__body">
-                  <input type="text" name="nickname" placeholder="${loginedMember.nickname}">
-                  <button class="btn btn-check" name="dupNickCheck" onclick="checkDupNick(this);" type="button"><i class="far fa-check-circle"></i> 중복체크</button>
+                <span>회원이름</span>
+                <div class=MyPage_cell__body>
+                  <input type="text" name="first_name" value="{{user.first_name}}">
                 </div>
               </div>
               <div class=MyPage_cell__title>
                 <span>e-mail</span>
                 <div class=MyPage_cell__body>
-                  <input type="email" name="email" value="${loginedMember.email}">
+                  <input type="email" name="email" value="{{user.email}}">
                 </div>
               </div>
-              <div class=MyPage_cell__title>
-                <span>연락처</span>
-                <div class=MyPage_cell__body>
-                  <input type="number" name="cellphoneNo" value="${loginedMember.cellphoneNo}">
-                </div>
-              </div>
-              <div class=MyPage_cell__title>
-                <span>회원등급</span>
-                <div class=MyPage_cell__body>
-                  <span>${loginedMember.authLevel}</span>
-                </div>
-              </div>
+<!--              <div class=MyPage_cell__title>-->
+<!--                <span>연락처</span>-->
+<!--                <div class=MyPage_cell__body>-->
+<!--                  <input type="number" name="cellphoneNo" value="${loginedMember.cellphoneNo}">-->
+<!--                </div>-->
+<!--              </div>-->
               <div class=MyPage_cell__title>
                 <span>회원가입일</span>
                 <div class=MyPage_cell__body>
-                  <span>${loginedMember.regDate}</span>
+                  <span>{{user.date_joined}}</span>
                 </div>
               </div>
               <div class="section-MyPage-body__option flex flex-jc-fe flex-ai-fe">
-                <button class="submitModifyBtn btn btn-go" type="submit" onclick="if(confirm('정말 변경하시겠습니까?') == false) {return false;}"><i class="far fa-edit"></i> 변경</button>
+                <button class="submitModifyBtn btn btn-go" type="submit" ><i class="far fa-edit"></i> 변경</button>
+<!--                 button 에 들어갈 것 onclick="if(confirm('정말 변경하시겠습니까?') == false) {return false;}"-->
                 <button class="cleModifyBtn btn btn-back" type="button" onclick="history.back();"><i class="fas fa-undo"></i> 취소</button>
               </div>
             </div>

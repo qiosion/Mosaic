@@ -27,7 +27,9 @@
 
       <!-- 회원정보 페이지 시작 -->
       <div class="section-MyPage min-height-50vh flex flex-jc-c flex-ai-c ">
-        <form action="doModifyInfo" method="POST">
+          {{error_message}}
+        <form action="/member/mypage" method="POST">
+            {% csrf_token %}
 <!--          form 에 들어갈 것 onsubmit="check(this); return false;"-->
           <div class="section-MyPage-body flex flex-jc-c flex-ai-c">
             <div class="section-MyPage-body__cell">
@@ -40,7 +42,7 @@
               <div class="MyPage_cell__title">
                 <span>회원ID</span>
                 <div class="MyPage_cell__body">
-                  <span>{{mypage.username}}</span>
+                  <span>{{user.username}}</span>
                 </div>
               </div>
               <div class=MyPage_cell__title>

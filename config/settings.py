@@ -22,6 +22,13 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
 
+# 브라우저를 닫을 때 세션이 종료, 자동 로그아웃
+SESSION_EXPIRE_AT_BROWSER_CLOSE = True
+
+# 세션 유효기간 3600초 = 1시간
+SESSION_COOKIE_AGE = 3600
+
+
 """
 FILE_UPLOAD_HANDLERS = [
     'django.core.files.uploadhandler.MemoryFileUploadHandler',

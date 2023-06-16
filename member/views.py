@@ -5,6 +5,9 @@ from django.core.exceptions import ValidationError
 from django.core.validators import EmailValidator
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth import update_session_auth_hash
+
 
 # 회원가입
 def signup(request):
@@ -17,10 +20,11 @@ def signup(request):
         first_name = request.POST.get('first_name')
         username = request.POST.get('username')
         password = request.POST.get('password')
-        email1 = request.POST.get('email1')
-        email2 = request.POST.get('email2')
-        if first_name and username and password and email1 and email2:
-            email = f"{email1}@{email2}"
+        email = request.POST.get('email')
+        # email1 = request.POST.get('email1')
+        # email2 = request.POST.get('email2')
+        if first_name and username and password and email:
+            # email = f"{email1}@{email2}"
 
             # email_validator = EmailValidator()
             # try:
@@ -30,9 +34,8 @@ def signup(request):
             #     context = {'error_message': error_message}
             #     return render(request, 'member/signup.html', context)
 
-            user = User(first_name=first_name, username=username)
+            user = User(first_name=first_name, username=username, email=email)
             user.set_password(password) # 비밀번호 암호화
-            user.email = email
             user.save()
 
             return redirect('index')  # 회원가입 성공 시 메인으로 돌아감
@@ -84,19 +87,28 @@ def delete(request):
         return redirect('index')
     return render(request, '')
 
+@login_required(login_url='/member/login')
 def update(request):
     if request.method == "POST":
         user = request.user
+        print('post에서 user : ', user)
 
         new_pw = request.POST.get('password')
-        email1 = request.POST.get('email1')
-        email2 = request.POST.get('email2')
-        new_em = f"{email1}@{email2}"
+        new_email = request.POST.get('email')
+        if new_pw and new_email:
+            user.email = new_email
+            user.set_password(new_pw)
+            user.save()
 
-        user.email = new_em
-        user.set_password(new_pw)
-        user.save()
-        return redirect('mypage')
+            update_session_auth_hash(request, user)
+
+            return redirect('mypage')
+        else:
+            error_message = "폼을 입력해주세요"
+            return render(request,
+                          'member/Mypage.html',
+                          {'error_message': error_message})
     elif request.method == "GET":
         user = request.user
+        print('get에서 user : ', user)
         return render(request, 'member/Mypage.html', {'user': user})

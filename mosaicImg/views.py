@@ -120,6 +120,8 @@ def shuffle_pieces(pieces):
     random.shuffle(pieces)
     return pieces
 
+# def combine_pieces(pieces, piece_size):
+    # width, height = piece_size
 def combine_pieces(pieces):
     width = pieces[0].width
     height = pieces[0].height
@@ -129,6 +131,7 @@ def combine_pieces(pieces):
         x = (i % 20) * width
         y = (i // 20) * height
         combined_img.paste(piece, (x, y))
+    # combined_img = combined_img.resize((517, 517))
 
     return combined_img
 
@@ -159,16 +162,26 @@ def get_face_shuffle(request, mos_no):
         face_images.append(roi_color)
 
     # 얼굴 이미지 셔플
+    # shuffled_face_img = shuffle_face_obj(face_images)
     pieces = split_face_obj(face_images)
     shuffled_pieces = shuffle_face_obj(pieces)
     combined_image = combine_pieces(shuffled_pieces)
+    # combined_image = combine_pieces(shuffled_pieces, (w, h))
 
     # PIL Image를 NumPy 배열로 변환
     combined_image_np = np.array(combined_image)
 
+    """
+    # 원본에 셔플 이미지 덮어쓰기 -> 구현중
+    result = img.copy()
+
+    for i, (x, y, w, h) in enumerate(faces):
+        result[y: y + h, x: x + w] = combined_image_np[i]
+    """
     # 이미지 저장
     output_path = os.path.join(settings.MEDIA_ROOT, 'mosaic', f'mosaic_{board_no}.jpg')
     os.makedirs(os.path.dirname(output_path), exist_ok=True)
+    # cv2.imwrite(output_path, result)
     cv2.imwrite(output_path, combined_image_np)
     print('이미지 저장 완료:', output_path)
 

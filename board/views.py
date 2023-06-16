@@ -11,6 +11,7 @@ from board.models import Board
 from mosaicImg.models import MosaicImg
 from mosaicImg.views import get_mosaic_haar
 from mosaicImg.views import get_shuffle_img
+from mosaicImg.views import get_face_shuffle
 from config import settings
 
 
@@ -35,6 +36,8 @@ def create(request):
                 get_mosaic_haar(request, mos.mos_no)
             elif selected_type == 'shuffle':
                 get_shuffle_img(request, mos.mos_no)
+            elif selected_type == 'faceShuffle':
+                get_face_shuffle(request, mos.mos_no)
             return redirect('read', board_no=board.board_no)
         else:
             error_message = '제목 작성과 업로드할 파일을 첨부를 확인하세요'

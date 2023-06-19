@@ -15,6 +15,7 @@ import os
 def mosaic_download(request, mos_no):
     mos = MosaicImg.objects.get(mos_no=mos_no)
     path = os.path.split(mos.mos_up.name)[1]
+    print("다운로드시 경로 뭐냐 path : ", path)
     mosaic_path = os.path.join(settings.MEDIA_ROOT, 'mosaic', f'mosaic_{path}')
     mosaic_url = settings.MEDIA_URL + 'mosaic/' + f'mosaic_{path}'
 
@@ -24,6 +25,7 @@ def mosaic_download(request, mos_no):
 def get_mosaic_haar(request, mos_no):
     mos = MosaicImg.objects.get(mos_no=mos_no)
     path = os.path.split(mos.mos_up.name)[1]
+    file_name, extension = os.path.splitext(path)
     input_path = os.path.join(settings.MEDIA_ROOT, 'uploads', f'{path}')
     print("input_path : ", input_path)
 
@@ -33,8 +35,12 @@ def get_mosaic_haar(request, mos_no):
     eye_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_eye.xml')
 
     # 이미지 불러오기
-    img = cv2.imread(input_path)
-    print("img : ", img)
+    if extension.lower() == '.png':
+        img = cv2.imread(input_path, cv2.IMREAD_COLOR)
+        print("img : ", img)
+    else:
+        img = cv2.imread(input_path)
+        print("img : ", img)
     gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 
     # 얼굴 찾기

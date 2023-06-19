@@ -14,19 +14,17 @@ import os
 
 def mosaic_download(request, mos_no):
     mos = MosaicImg.objects.get(mos_no=mos_no)
-
-    board_no = str(mos.board_no.board_no).zfill(8)
-    mosaic_path = os.path.join(settings.MEDIA_ROOT, 'mosaic', f'mosaic_{board_no}.jpg')
-    mosaic_url = settings.MEDIA_URL + 'mosaic/' + f'mosaic_{board_no}.jpg'
+    path = os.path.split(mos.mos_up.name)[1]
+    mosaic_path = os.path.join(settings.MEDIA_ROOT, 'mosaic', f'mosaic_{path}')
+    mosaic_url = settings.MEDIA_URL + 'mosaic/' + f'mosaic_{path}'
 
     return redirect(mosaic_url)
 
 
 def get_mosaic_haar(request, mos_no):
     mos = MosaicImg.objects.get(mos_no=mos_no)
-    board_no = str(mos.board_no.board_no).zfill(8)
-
-    input_path = os.path.join(settings.MEDIA_ROOT, 'uploads', f'{board_no}.jpg')
+    path = os.path.split(mos.mos_up.name)[1]
+    input_path = os.path.join(settings.MEDIA_ROOT, 'uploads', f'{path}')
     print("input_path : ", input_path)
 
     # haarcascade 불러오기
@@ -66,38 +64,33 @@ def get_mosaic_haar(request, mos_no):
         cv2.destroyAllWindows()
 
     # 이미지 저장
-    output_path = os.path.join(settings.MEDIA_ROOT, 'mosaic', f'mosaic_{board_no}.jpg')
+    output_path = os.path.join(settings.MEDIA_ROOT, 'mosaic', f'mosaic_{path}')
     os.makedirs(os.path.dirname(output_path), exist_ok=True) # 저장 디렉터리 확인
     cv2.imwrite(output_path, img)
     print('이미지 저장 완료:', output_path)
 
     # DB에 저장
-    mos.mos_down = f"mosaic/mosaic_{board_no}.jpg"
+    mos.mos_down = f"mosaic/mosaic_{path}"
     mos.save()
 
 # 전체 이미지 셔플
 def get_shuffle_img(request, mos_no):
     mos = MosaicImg.objects.get(mos_no=mos_no)
-    board_no = str(mos.board_no.board_no).zfill(8)
+    path = os.path.split(mos.mos_up.name)[1]
 
-    input_path = os.path.join(settings.MEDIA_ROOT, 'uploads', f'{board_no}.jpg')
+    input_path = os.path.join(settings.MEDIA_ROOT, 'uploads', f'{path}')
     print("input_path : ", input_path)
-    #
-    # mos_up = './img/[Sample]Jisoo.jpg'
 
     pieces = split_image(input_path)
     shuffled_pieces = shuffle_pieces(pieces)
     combined_image = combine_pieces(shuffled_pieces)
 
-    # piece_down = './down'
-    # os.makedirs(piece_down, exist_ok=True)
-    # output_path = os.path.join(piece_down, 'pieced_img.jpg')
-    output_path = os.path.join(settings.MEDIA_ROOT, 'mosaic', f'mosaic_{board_no}.jpg')
+    output_path = os.path.join(settings.MEDIA_ROOT, 'mosaic', f'mosaic_{path}')
     os.makedirs(os.path.dirname(output_path), exist_ok=True)  # 저장 디렉터리 확인
 
     combined_image.save(output_path)
     # DB에 저장
-    mos.mos_down = f"mosaic/mosaic_{board_no}.jpg"
+    mos.mos_down = f"mosaic/mosaic_{path}"
     mos.save()
 
 def split_image(input_path):
@@ -138,9 +131,9 @@ def combine_pieces(pieces):
 # 얼굴만 셔플
 def get_face_shuffle(request, mos_no):
     mos = MosaicImg.objects.get(mos_no=mos_no)
-    board_no = str(mos.board_no.board_no).zfill(8)
+    path = os.path.split(mos.mos_up.name)[1]
 
-    input_path = os.path.join(settings.MEDIA_ROOT, 'uploads', f'{board_no}.jpg')
+    input_path = os.path.join(settings.MEDIA_ROOT, 'uploads', f'{path}')
     print("input_path : ", input_path)
 
     # haarcascade 불러오기
@@ -179,14 +172,14 @@ def get_face_shuffle(request, mos_no):
         result[y: y + h, x: x + w] = combined_image_np[i]
     """
     # 이미지 저장
-    output_path = os.path.join(settings.MEDIA_ROOT, 'mosaic', f'mosaic_{board_no}.jpg')
+    output_path = os.path.join(settings.MEDIA_ROOT, 'mosaic', f'mosaic_{path}')
     os.makedirs(os.path.dirname(output_path), exist_ok=True)
     # cv2.imwrite(output_path, result)
     cv2.imwrite(output_path, combined_image_np)
     print('이미지 저장 완료:', output_path)
 
     # DB에 저장
-    mos.mos_down = f"mosaic/mosaic_{board_no}.jpg"
+    mos.mos_down = f"mosaic/mosaic_{path}"
     mos.save()
 
 def split_face_obj(face_images):

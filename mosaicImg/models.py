@@ -1,17 +1,27 @@
 from django.db import models
-
+from datetime import datetime
 from board.models import Board
+from django.shortcuts import get_object_or_404
 
 def upload_path(instance, filename):
     # 업로드 경로를 동적으로 생성
     # 이 함수는 board_upload 필드에 설정된 업로드 경로와 동일한 경로를 반환
-    board_no = str(instance.board_no.board_no).zfill(8)
-    return f"uploads/{board_no}.jpg"
+    board_no = instance.board_no.board_no
+    board = get_object_or_404(Board, board_no=board_no)
+    id = board.member
+    print("사용자 아이디 : ", id)
+    now = datetime.today().strftime("%Y%m%d%H%M%S")
+    return f"uploads/{id}_{now}.jpg"
+    # board_no = str(board.board_no).zfill(8)
+    # return f"uploads/{board_no}.jpg"
 
 def download_path(instance, filename):
-    board_no = str(instance.board_no.board_no).zfill(8)
-    print('board_no.board_no : ', board_no)
-    return f"uploads/mosaic_{board_no}.jpg"
+    # board_no = instance.board_no.board_no
+    # board = get_object_or_404(Board, board_no=board_no)
+    # mos = get_object_or_404(Board, board_no=board_no)
+    path = os.path.split(instance.mos_up.name)
+    print("path : ", path)
+    return f"mosaic/{path}"
 
 class MosaicImg(models.Model):
     mos_no = models.AutoField(primary_key=True)

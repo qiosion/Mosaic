@@ -2,6 +2,7 @@ from django.db import models
 from datetime import datetime
 from board.models import Board
 from django.shortcuts import get_object_or_404
+import os
 
 def upload_path(instance, filename):
     # 업로드 경로를 동적으로 생성
@@ -9,11 +10,9 @@ def upload_path(instance, filename):
     board_no = instance.board_no.board_no
     board = get_object_or_404(Board, board_no=board_no)
     id = board.member
-    print("사용자 아이디 : ", id)
     now = datetime.today().strftime("%Y%m%d%H%M%S")
-    return f"uploads/{id}_{now}.jpg"
-    # board_no = str(board.board_no).zfill(8)
-    # return f"uploads/{board_no}.jpg"
+    _, extension = os.path.splitext(filename)
+    return f"uploads/{id}_{now}{extension}"
 
 def download_path(instance, filename):
     # board_no = instance.board_no.board_no

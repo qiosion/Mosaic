@@ -42,7 +42,9 @@ def signup(request):
         else:
             error_message = "폼이 유효하지 않습니다"
             context = {'error_message': error_message}
-            return render(request, 'member/signup.html', context)
+            return render(request,
+                          'member/signup.html',
+                          context)
     return HttpResponse("Invalid request")  # POST 메서드 외에는 처리하지 않음
 
 # 로그인
@@ -76,16 +78,26 @@ def login(request):
 # 로그아웃
 def logout(request):
     auth_logout(request)
-    # return redirect('/forum/list')
     return redirect('index')
 
 def delete(request):
     if request.method == "POST":
-        user = request.user
-        user.delete()
-        logout(request)
-        return redirect('index')
-    return render(request, 'member/delete.html')
+        password = request.POST.get('password')
+        user = authenticate(request, username=request.user, password=password)
+
+        if user is not None:
+            user.delete()
+            logout(request)
+            return redirect('index')
+        else:
+            error_message = "비밀번호가 일치하지 않습니다"
+            return render(request,
+                          'member/delete.html',
+                          {'error_message': error_message})
+
+    elif request.method == 'GET':
+        return render(request,
+                      'member/delete.html')
 
 @login_required(login_url='/member/login')
 def update(request):
@@ -111,4 +123,6 @@ def update(request):
     elif request.method == "GET":
         user = request.user
         print('get에서 user : ', user)
-        return render(request, 'member/Mypage.html', {'user': user})
+        return render(request,
+                      'member/Mypage.html',
+                      {'user': user})

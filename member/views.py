@@ -85,7 +85,7 @@ def delete(request):
         user.delete()
         logout(request)
         return redirect('index')
-    return render(request, '')
+    return render(request, 'member/delete.html')
 
 @login_required(login_url='/member/login')
 def update(request):

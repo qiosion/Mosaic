@@ -57,6 +57,12 @@
                   <input type="password" maxlength="50" placeholder="PW 확인">
                 </div>
               </div>
+              <div class=MyPage_cell__title>
+                <span>내가 작성한 글</span>
+                <div class=MyPage_cell__body>
+                  <button class="submitModifyBtn btn btn-go" type="button" onclick="location.href='{% url 'list' %}'">확인하기</button>
+                </div>
+              </div>
             </div>
             <div class="section-MyPage-body__cell">
               <div class="MyPage_cell__title">
@@ -82,6 +88,21 @@
                 <div class=MyPage_cell__body>
                   <span>{{user.date_joined}}</span>
                 </div>
+              </div>
+              <div class=MyPage_cell__title>
+                <span>회원탈퇴</span>
+                <div class=MyPage_cell__body>
+                  <div class=MyPage_cell__body>
+                   <form method="post" >
+                      {% csrf_token %}
+                      <p>정말 탈퇴하시겠습니까?</p>
+                      <button class="cleModifyBtn btn btn-back" type="button" onclick="location.href='{% url 'delete' %}'">회원 탈퇴</button>
+                   </form>
+                  </div>
+                </div>
+              </div>
+              <div>
+
               </div>
               <div class="section-MyPage-body__option flex flex-jc-fe flex-ai-fe">
                 <button class="submitModifyBtn btn btn-go" type="submit" ><i class="far fa-edit"></i> 변경</button>

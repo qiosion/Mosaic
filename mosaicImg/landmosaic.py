@@ -3,9 +3,13 @@ import cv2
 import numpy as np
 from imutils import face_utils
 
-def land_mosaic(image_path):
+def land_mosaic(request, mos_no):
+    mos = MosaicImg.objects.get(mos_no=mos_no)
+    path = os.path.split(mos.mos_up.name)[1]
+    file_name, extension = os.path.splitext(path)
+    input_path = os.path.join(settings.MEDIA_ROOT, 'uploads', f'{path}')
     # 이미지 로드
-    frame = cv2.imread(image_path)
+    frame = cv2.imread(input_path)
 
     # 얼굴 감지 및 랜드마크 예측 모델 설정
     detector = dlib.get_frontal_face_detector()
@@ -36,3 +40,13 @@ def land_mosaic(image_path):
     cv2.imshow('Mosaic Image', frame)
     cv2.waitKey(0)
     cv2.destroyAllWindows()
+
+    # 이미지 저장
+    output_path = os.path.join(settings.MEDIA_ROOT, 'mosaic', f'mosaic_{path}')
+    os.makedirs(os.path.dirname(output_path), exist_ok=True) # 저장 디렉터리 확인
+    cv2.imwrite(output_path, frame)
+    print('이미지 저장 완료:', output_path)
+
+    # DB에 저장
+    mos.mos_down = f"mosaic/mosaic_{path}"
+    mos.save()

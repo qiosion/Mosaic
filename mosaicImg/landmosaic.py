@@ -9,7 +9,7 @@ def land_mosaic(image_path):
 
     # 얼굴 감지 및 랜드마크 예측 모델 설정
     detector = dlib.get_frontal_face_detector()
-    predictor = dlib.shape_predictor('../shape_predictor_68_face_landmarks.dat/shape_predictor_68_face_landmarks.dat')
+    predictor = dlib.shape_predictor('./shape_predictor_68_face_landmarks.dat/shape_predictor_68_face_landmarks.dat')
 
     # 회색 이미지로 변환
     img_gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)

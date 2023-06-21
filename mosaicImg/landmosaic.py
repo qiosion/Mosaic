@@ -1,7 +1,12 @@
+import os
+
 import dlib
 import cv2
 import numpy as np
 from imutils import face_utils
+
+from mosaicImg.models import MosaicImg
+
 
 def land_mosaic(request, mos_no):
     mos = MosaicImg.objects.get(mos_no=mos_no)

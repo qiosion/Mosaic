@@ -26,26 +26,36 @@
                     <div class="date">작성일</div>
 <!--                    <div class="count">조회수</div>-->
                 </div>
-                {% for list in board %}
-                <div>
-                    <div class="num">{{list.board_no}}</div>
-                    <div class="title"><a href="{% url 'read' list.board_no %}">{{list.board_title}}</a></div>
-                    <div class="writer">{{list.member}}</div>
-                    <div class="date">{{list.board_date}}</div>
-<!--                    <div class="count">33</div>-->
-                </div>
+                {% for post in page_obj %}
+                    <div>
+                        <div class="num">{{post.board_no}}</div>
+                        <div class="title"><a href="{% url 'read' post.board_no %}">{{post.board_title}}</a></div>
+                        <div class="writer">{{post.member}}</div>
+                        <div class="date">{{post.board_date}}</div>
+    <!--                    <div class="count">33</div>-->
+                    </div>
                 {% endfor %}
             </div>
             <div class="board_page">
-                <a href="#" class="bt first"><<</a>
-                <a href="#" class="bt prev"><</a>
-                <a href="#" class="num on">1</a>
-                <a href="#" class="num">2</a>
-                <a href="#" class="num">3</a>
-                <a href="#" class="num">4</a>
-                <a href="#" class="num">5</a>
-                <a href="#" class="bt next">></a>
-                <a href="#" class="bt last">>></a>
+                {% if page_obj.has_other_pages %}
+                    <a href="?page=1" class="bt first"><<</a>
+                    {% if page_obj.has_previous %}
+                        <a href="?page={{page_obj.previous_page_number}}" class="bt prev"><</a>
+                    {% endif %}
+
+                    {% for page in custom_range %}
+                        {% if page == page_obj.number %}
+                            <a href="?page={{page}}" class="num on">{{page}}</a>
+                        {% else %}
+                            <a href="?page={{page}}" class="num">{{page}}</a>
+                        {% endif %}
+                    {% endfor %}
+
+                    {% if page_obj.has_next %}
+                        <a href="?page={{page_obj.next_page_number}}" class="bt next">></a>
+                    {% endif %}
+                    <a href="?page={{page_obj.paginator.num_pages}}" class="bt last">>></a>
+                {% endif %}
             </div>
             <div class="bt_wrap">
                 <a href="{% url 'create' %}" class="on">등록</a>

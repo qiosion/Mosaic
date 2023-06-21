@@ -14,6 +14,8 @@ from mosaicImg.views import get_shuffle_img
 from mosaicImg.views import get_face_shuffle
 from config import settings
 
+from mosaicImg.views import get_mosaic_zoom
+
 
 @login_required(login_url='/member/login')
 def create(request):
@@ -34,6 +36,8 @@ def create(request):
             mos.save()
             if selected_type == 'harr':
                 get_mosaic_haar(request, mos.mos_no)
+            elif selected_type == 'test':
+                get_mosaic_zoom(request, mos.mos_no)
             elif selected_type == 'shuffle':
                 get_shuffle_img(request, mos.mos_no)
             elif selected_type == 'faceShuffle':

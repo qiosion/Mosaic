@@ -224,3 +224,42 @@ def shuffle_face_obj(pieces):
 #         combined_image[:, x_start:x_end, :] = image
 #
 #     return combined_image
+
+
+# 2배 Zoom
+def zoom_image(image_path):
+    img = cv2.imread(image_path)
+    img_result = cv2.resize(img, None, fx=2, fy=2, interpolation=cv2.INTER_CUBIC)
+    cv2.imshow("x2", img_result)
+    cv2.waitKey(0)
+    cv2.destroyAllWindows()
+
+image_path = 'faces0.png'
+zoom_image(image_path)
+
+
+# 해상도 3배로 올리는 함수
+# 파일도 같이 올렸지만 혹시 돌아가지 않는 다면 pip install opencv-contrib-python 설치하기
+def upscale_image(output_path):
+    # 모델 로드하기
+    sr = cv2.dnn_superres.DnnSuperResImpl_create()
+    sr.readModel('ESPCN_x3.pb')
+    sr.setModel('espcn', 3)
+
+    # 이미지 로드하기
+    img = cv2.imread(output_path)
+
+    # 이미지 추론하기(해당 함수는 전처리와 후처리를 한꺼번에 해줍니다.)
+    result = sr.upsample(img)
+
+    # 결과 이미지 비교하기
+    resized_img = cv2.resize(img, dsize=None, fx=3, fy=3)
+
+    cv2.imshow('Original Image', img)   # 원본
+    cv2.imshow('Resized Image', resized_img)  # 크기를 3배로 변경한 이미지
+    cv2.imshow('Upscaled Image', result)   # 해상도 올린 이미지
+    cv2.waitKey(0)
+    cv2.destroyAllWindows()
+
+image_path = 'zoom_pp0.jpg'
+upscale_image(image_path)

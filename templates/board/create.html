@@ -3,11 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>게시판</title>
-    <link rel="stylesheet" href="css.css">
+    <title>모자이크 게시판</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static "css.css" %}">
 </head>
 <body>
-<form action="/board/create" method="post" enctype="multipart/form-data">
+<header>
+    <link rel="stylesheet" type="text/css" href="{% static "index.css" %}">
+{% include 'navbar.html' %}
+</header>
+<form action="{% url 'create' %}" method="post" enctype="multipart/form-data">
     {% csrf_token %}
     {{error_message}}
     <div class="board_wrap">
@@ -28,17 +33,28 @@
                         <dt>파일</dt>
                         <dd><input type="file"  name="mos_up"></dd>
                     </dl>
+                    <dl>
+                        <dt>모자이크 형식</dt>
+                        <dd>
+                            <input type="radio" name="type" value="harr" checked>기본 모자이크
+                            <input type="radio" name="type" value="test" checked>test
+                            <input type="radio" name="type" value="shuffle">이미지 섞기
+                            <input type="radio" name="type" value="faceShuffle">얼굴 섞기
+                        </dd>
+                    </dl>
                 </div>
                 <div class="cont">
                     <textarea placeholder="내용 입력" name="board_content"></textarea>
                 </div>
             </div>
             <div class="bt_wrap">
-                <button>등록</button>
-                <a href="list.html">취소</a>
+                <button type="submit">등록</button>
+                <a href="{% url 'list' %}">취소</a>
             </div>
         </div>
     </div>
     </form>
+    {% block content %}
+    {% endblock %}
 </body>
 </html>

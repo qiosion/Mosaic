@@ -10,7 +10,11 @@ import member
 from board.models import Board
 from mosaicImg.models import MosaicImg
 from mosaicImg.views import get_mosaic_haar
+from mosaicImg.views import get_shuffle_img
+from mosaicImg.views import get_face_shuffle
 from config import settings
+
+from mosaicImg.views import get_mosaic_zoom
 
 
 @login_required(login_url='/member/login')
@@ -19,22 +23,25 @@ def create(request):
         board_title = request.POST.get('board_title')
         board_content = request.POST.get('board_content')
         mos_up = request.FILES.get('mos_up')
-        print('board_title : ', board_title)
-        print('board_content : ', board_content)
-        print('mos_up : ', mos_up)
+        selected_type = request.POST.get('type')
+        print('selected_type : ', selected_type)
 
         if board_title and mos_up:
             member = request.user
             board = Board(member=member, board_title=board_title, board_content=board_content)
             board.save()
             board_no = board.board_no
-            print('board_no : ', board_no)
-            # mos = MosaicImg(mos_up=mos_up, board_no=board_no)
             board_instance = get_object_or_404(Board, board_no=board_no)
             mos = MosaicImg(mos_up=mos_up, board_no=board_instance)
             mos.save()
-            get_mosaic_haar(request, mos.mos_no)
-            # return redirect('list')
+            if selected_type == 'harr':
+                get_mosaic_haar(request, mos.mos_no)
+            elif selected_type == 'test':
+                get_mosaic_zoom(request, mos.mos_no)
+            elif selected_type == 'shuffle':
+                get_shuffle_img(request, mos.mos_no)
+            elif selected_type == 'faceShuffle':
+                get_face_shuffle(request, mos.mos_no)
             return redirect('read', board_no=board.board_no)
         else:
             error_message = '제목 작성과 업로드할 파일을 첨부를 확인하세요'
@@ -49,17 +56,11 @@ def create(request):
             'board/create.html'
         )
 
-
-# urlpatterns = [
-#     path('board/<int:board_id>/mosaic_download/', mosaic_download, name='mosaic_download'),
-# ]
-
 def read(request, board_no):
     board = Board.objects.get(board_no=board_no)
     board_instance = get_object_or_404(Board, board_no=board_no)
     mos = MosaicImg.objects.get(board_no=board_instance)
-    print("read 하면 mos_up : ", mos.mos_up)
-    print("read 하면 mos_down : ", mos.mos_down)
+
     context = { 'board': board, 'mos': mos }
 
     return render(
@@ -81,22 +82,33 @@ def list(request):
 def update(request, board_no):
     board = get_object_or_404(Board, board_no=board_no)
     mos = get_object_or_404(MosaicImg, board_no=board)
-    if request.method == 'POST':
-        try:
-            board_title = request.POST.get('board_title')
-            board_content = request.POST.get('board_content')
-            mos_up = request.FILES.get('mos_up')
-            print('board_title : ', board_title)
-            print('board_content : ', board_content)
-            print('mos_up : ', mos_up)
 
-            if board_title and mos_up:
+    if request.method == 'POST':
+        board_title = request.POST.get('board_title')
+        board_content = request.POST.get('board_content')
+        mos_up = request.FILES.get('mos_up')
+        selected_type = request.POST.get('type')
+        try:
+            if board_title:
                 board.board_title = board_title
                 board.board_content = board_content
-                board.save()
-                mos.mos_up = mos_up
-                mos.save()
-                return redirect('read', board_no=board.board_no)
+            board.save()
+
+            if mos_up is None:
+                # 아무 파일도 선택하지 않은 경우 기존 파일 사용
+                mos_up = mos.mos_up
+
+            mos.mos_up = mos_up
+            mos.save()
+            if mos_up:
+                if selected_type == 'harr':
+                    get_mosaic_haar(request, mos.mos_no)
+                elif selected_type == 'shuffle':
+                    get_shuffle_img(request, mos.mos_no)
+                elif selected_type == 'faceShuffle':
+                    get_face_shuffle(request, mos.mos_no)
+
+            return redirect('read', board_no=board.board_no)
 
         except Exception as e:
             error_message = '게시글 업데이트에 실패했습니다.'
@@ -104,10 +116,24 @@ def update(request, board_no):
                           'board/update.html',
                           {'board': board, 'mos': mos,
                            'error_message': error_message})
-    context = {'board': board, 'mos': mos}
+    elif request.method == 'GET':
+        context = {'board': board, 'mos': mos}
+        return render(
+            request,
+            'board/update.html',
+            context
+        )
 
-    return render(
-        request,
-        'board/update.html',
-        context
-    )
+def delete(request, board_no):
+    login_session = request.session.get('login_session', '')
+    board = get_object_or_404(Board, board_no=board_no)
+    try:
+        board.delete()
+
+    except Exception as e:
+        error_message = '게시글 삭제에 실패했습니다.'
+        return render(request,
+                      'board/read.html',
+                      {'board': board,
+                       'error_message': error_message})
+    return redirect('list')

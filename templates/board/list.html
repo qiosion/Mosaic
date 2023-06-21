@@ -4,13 +4,18 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>게시판</title>
-    <link rel="stylesheet" href="css.css">
+    {% load static %}
+    <link rel="stylesheet" href="{% static "css.css" %}">
 </head>
 <body>
+    <header>
+        <link rel="stylesheet" type="text/css" href="{% static "index.css" %}">
+    {% include 'navbar.html' %}
+    </header>
     <div class="board_wrap">
         <div class="board_title">
-            <strong>게시판</strong>
-            <p>게시판에 글을 올려주세요.</p>
+            <strong>모자이크 게시판</strong>
+<!--            <p>게시판에 글을 올려주세요.</p>-->
         </div>
         <div class="board_list_wrap">
             <div class="board_list">
@@ -21,12 +26,12 @@
                     <div class="date">작성일</div>
 <!--                    <div class="count">조회수</div>-->
                 </div>
-                {% for row in data %}
+                {% for list in board %}
                 <div>
-                    <div class="num">{{board.board_no}}</div>
-                    <div class="title"><a href="read.html">{{board.board_title}}</a></div>
-                    <div class="writer">{{board.board_id}}</div>
-                    <div class="date">{{board.board_date}}</div>
+                    <div class="num">{{list.board_no}}</div>
+                    <div class="title"><a href="{% url 'read' list.board_no %}">{{list.board_title}}</a></div>
+                    <div class="writer">{{list.member}}</div>
+                    <div class="date">{{list.board_date}}</div>
 <!--                    <div class="count">33</div>-->
                 </div>
                 {% endfor %}
@@ -43,11 +48,13 @@
                 <a href="#" class="bt last">>></a>
             </div>
             <div class="bt_wrap">
-                <a href="create.html" class="on">등록</a>
+                <a href="{% url 'create' %}" class="on">등록</a>
                 <!--<a href="#">수정</a>-->
             </div>
         </div>
     </div>
+    {% block content %}
+    {% endblock %}
 </body>
 </html>
 

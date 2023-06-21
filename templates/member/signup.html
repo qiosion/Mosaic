@@ -129,6 +129,7 @@
 
 </head>
 <body>
+
 <!-- <footer>
     <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
         <div class="container-fluid">
@@ -146,7 +147,7 @@
                 <li class="nav-item">
                     <a class="nav-link" href="#">Board</a>
                 </li>
-                
+
                 <li class="nav-item">
                     <a class="nav-link" href="#">Mypage</a>
                 </li>
@@ -159,7 +160,7 @@
           </div>
         </div>
       </nav>
-      
+
 </footer> -->
 {% if error_message %}
     <p>{{error_message}}</p>
@@ -198,16 +199,17 @@
                 <tr>
                     <td class="col1">이메일</td>
                     <td class="col2">
-                        <input type="text" name="email1">
-                        <span class="a">@</span>
-                        <input type="text" name="email2">
-                        <select name="mailslc">
-                            <option value="self" selected>직접입력</option>
-                            <option value="naver">naver.com</option>
-                            <option value="gm">gmail.com</option>
-                            <option value="da">daum.com</option>
-                            <option value="yah">yahoo.com</option>
-                        </select>
+                        <input type="email" name="email">
+<!--                        <input type="text" name="email1">-->
+<!--                        <span class="a">@</span>-->
+<!--                        <input type="text" name="email2">-->
+<!--                        <select name="mailslc">-->
+<!--                            <option value="self" selected>직접입력</option>-->
+<!--                            <option value="naver">naver.com</option>-->
+<!--                            <option value="gm">gmail.com</option>-->
+<!--                            <option value="da">daum.com</option>-->
+<!--                            <option value="yah">yahoo.com</option>-->
+<!--                        </select>-->
                         <input class='but2' type="button" value="이메일 중복확인" onclick="">
                     </td>
                 </tr>
@@ -217,7 +219,7 @@
 
         <div class="create">
 
-            <input class="but3" type="button" value="가입취소" onclick="">
+            <input class="but3" type="button" value="가입취소" onclick="location.href='{% url 'index' %}'">
             <input class="but4" type="submit" value="회원가입"><!-- onclick="formCheck(this.form)"> -->
 
         </div>

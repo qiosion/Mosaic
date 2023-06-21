@@ -14,7 +14,7 @@ from mosaicImg.views import get_mosaic_haar
 from mosaicImg.views import get_shuffle_img
 from mosaicImg.views import get_face_shuffle
 from mosaicImg.views import get_mosaic_zoom
-from mosaicImg.landmosaic import land_mosaic
+# from mosaicImg.landmosaic import land_mosaic
 from config import settings
 
 
@@ -44,8 +44,8 @@ def create(request):
                 get_mosaic_haar(request, mos.mos_no)
             elif selected_type == 'test':
                 get_mosaic_zoom(request, mos.mos_no)
-            elif selected_type == 'jia':
-                land_mosaic(request, mos.mos_no)
+            # elif selected_type == 'jia':
+            #     land_mosaic(request, mos.mos_no)
             elif selected_type == 'shuffle':
                 get_shuffle_img(request, mos.mos_no)
             elif selected_type == 'faceShuffle':
@@ -78,7 +78,7 @@ def read(request, board_no):
         context
     )
 
-# 글 목록 함수
+# 글 목록
 def list(request):
     board = Board.objects.all().order_by('-board_date')
 
@@ -116,6 +116,46 @@ def list(request):
         context
     )
 
+# 작성글 확인
+def my_list(request):
+    member = request.user
+    board = Board.objects.filter(member=member).order_by('-board_date')
+
+    # 페이지네이션
+    page = request.GET.get('page')
+    paginator = Paginator(board, 10)
+
+    try:
+        page_obj = paginator.page(page)
+    except PageNotAnInteger: # page 입력하지 않았을 경우 예외처리
+        page = 1
+        page_obj = paginator.page(page)
+    except EmptyPage: # page값이 너무 클 경우(존재하지 않는 경우) 예외처리
+        page = paginator.num_pages # 가장 마지막 페이지
+        page_obj = paginator.page(page)
+
+    leftIndex = (int(page) - 2)
+    if leftIndex < 1:
+        leftIndex = 1
+
+    rightIndex = (int(page) + 2)
+    if rightIndex > paginator.num_pages:
+        rightIndex = paginator.num_pages
+
+    custom_range = range(leftIndex, rightIndex+1)
+
+    context = { 'board': board,
+                'page_obj': page_obj,
+                'paginator': paginator,
+                'custom_range': custom_range }
+
+    return render(
+        request,
+        'board/my_list.html',
+        context
+    )
+
+# 게시글 수정
 def update(request, board_no):
     board = get_object_or_404(Board, board_no=board_no)
     mos = get_object_or_404(MosaicImg, board_no=board)

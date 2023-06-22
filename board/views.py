@@ -14,7 +14,7 @@ from mosaicImg.views import get_mosaic_haar
 from mosaicImg.views import get_shuffle_img
 from mosaicImg.views import get_face_shuffle
 from mosaicImg.views import get_mosaic_zoom
-# from mosaicImg.landmosaic import land_mosaic
+from mosaicImg.views import land_mosaic
 from config import settings
 
 
@@ -44,8 +44,8 @@ def create(request):
                 get_mosaic_haar(request, mos.mos_no)
             elif selected_type == 'test':
                 get_mosaic_zoom(request, mos.mos_no)
-            # elif selected_type == 'jia':
-            #     land_mosaic(request, mos.mos_no)
+            elif selected_type == 'jia':
+                land_mosaic(request, mos.mos_no)
             elif selected_type == 'shuffle':
                 get_shuffle_img(request, mos.mos_no)
             elif selected_type == 'faceShuffle':

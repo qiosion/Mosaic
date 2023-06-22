@@ -6,12 +6,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Signup</title>
     <style type="text/css">
-        
-        
+
+
         /* div.container{} */
-      
+
         /* div.insert{} */
-   
+
       div.create{
       width: 800px;
       text-align: center;
@@ -19,7 +19,7 @@
       border-bottom: 1px solid black;
       margin: auto;
       }
-   
+
       table{
       height: 300px;
       width: 900px;
@@ -27,15 +27,15 @@
       margin-right: auto;
       margin-left: auto;
       }
-   
+
       td{
       border-bottom: 1px dotted black;
       }
-   
+
       caption{
       text-align: left;
       }
-   
+
       .col1 {
       background-color: #e8e8e8;
       padding: 10px;
@@ -43,12 +43,12 @@
       font-weight: bold;
       font-size: 0.8em;
       }
-   
+
       .col2 {
       text-align: left;
       padding: 5px;
       }
-   
+
       .but1 {
       height: 25px;
       width: 80px;
@@ -56,7 +56,7 @@
       background-color: black;
       border-color: black;
       }
-   
+
       .but2 {
       height: 27px;
       width: 120px;
@@ -64,68 +64,122 @@
       background-color: black;
       border-color: black;
       }
-   
+
       .but3 {
       height: 35px;
       width: 150px;
       background-color: white;
       border: 2px solid black;
       }
-   
+
       .but4{
       height: 35px;
       width: 150px;
       background-color: white;
       border: 2px solid black;
       }
-      
+
       .but1:hover {
       background-color: #b9b9b9;
       color: black;
       border: 2px solid black;
       }
-   
+
       .but2:hover {
       background-color: #b9b9b9;
       color: black;
       border: 2px solid black;
       }
-   
+
       .but3:hover {
       background-color: black;
       color: white;
       border: 2px solid black;
       }
-   
+
       .but4:hover {
       background-color: black;
       color: white;
       border: 2px solid black;
       }
-      
+
       p{
       font-size: 0.7em;
       }
-   
+
       .g{
       font-size: 0.7em;
       }
-   
+
       .c{
       font-size: 0.7em;
       }
-   
+
       .a{
       font-size: 0.7em;
       }
-      
+
       .num{
       color: red;
       }
-   
+
 
 
     </style>
+    <script>
+
+     function check_pw(){
+
+            var pw = document.getElementById('pw').value;
+            var SC = ["!","@","#","$","%"];
+            var check_SC = 0;
+
+            if(pw.length < 6 || pw.length>16){
+                window.alert('비밀번호는 6글자 이상, 16글자 이하만 이용 가능합니다.');
+                document.getElementById('pw').value='';
+            }
+            for(var i=0;i<SC.length;i++){
+                if(pw.indexOf(SC[i]) != -1){
+                    check_SC = 1;
+                }
+            }
+            if(check_SC == 0){
+                window.alert('!,@,#,$,% 의 특수문자가 들어가 있지 않습니다.')
+                document.getElementById('pw').value='';
+            }
+            if(document.getElementById('pw').value !='' && document.getElementById('pw2').value!=''){
+                if(document.getElementById('pw').value==document.getElementById('pw2').value){
+                    document.getElementById('check').innerHTML='비밀번호가 일치합니다.'
+                    document.getElementById('check').style.color='blue';
+                }
+                else{
+                    document.getElementById('check').innerHTML='비밀번호가 일치하지 않습니다.';
+                    document.getElementById('check').style.color='red';
+                }
+            }
+        }
+
+
+<!--        function isSame() {-->
+<!--            var pw = document.twin.password.value;-->
+<!--            var checkPw = document.twin.password_check.value;-->
+<!--            if (pw.length < 6 || pw.length > 16) {-->
+<!--                window.alert('비밀번호는 8글자 이상, 16글자 이하만 이용 가능합니다.');-->
+<!--                document.getElementById('pw').value=document.getElementById('pw_check').value='';-->
+<!--                document.getElementById('same').innerHTML='';-->
+<!--            }-->
+<!--            if(document.getElementById('pw').value!='' && document.getElementById('pw_check').value!='') {-->
+<!--                if(document.getElementById('pw').value==document.getElementById('pw_check').value) {-->
+<!--                    document.getElementById('same').innerHTML='비밀번호가 일치합니다.';-->
+<!--                    document.getElementById('same').style.color='blue';-->
+<!--                }-->
+<!--                else {-->
+<!--                    document.getElementById('same').innerHTML='비밀번호가 일치하지 않습니다.';-->
+<!--                    document.getElementById('same').style.color='red';-->
+<!--                }-->
+<!--            }-->
+<!--        }-->
+    </script>
 
 </head>
 <body>
@@ -176,9 +230,12 @@
                 <tr>
                     <td class="col1">아이디</td>
                     <td class="col2">
-                        <input type="text" name="username" maxlength="10">
-                        <input class='but1' type="button" value="중복확인" onclick="">
+                        <input type="text" name="username" id="username" maxlength="10">
+                        <div class="check_font" id="id_check"></div>
+<!--                        <input class='but1' type="button" id="id_check" value="중복확인">-->
+
                     </td>
+
                 </tr>
                 <tr>
                     <td class="col1">이름</td>
@@ -187,30 +244,19 @@
                 <tr>
                     <td class="col1">비밀번호</td>
                     <td class="col2">
-                        <input type="password" name="password" maxlength="16">
-                        <p>※비밀번호는 <span class="num">문자, 숫자, 특수문자(~!@#$%^&*)의 조합
-              8 ~ 16자리</span>로 입력이 가능합니다.</p>
+                        <input type="password" name="password" id="pw" onchange="check_pw()" maxlength="16">
+                        <p>※비밀번호는 <span class="num">문자, 숫자, 특수문자(~!@#$%^&*)의 조합 8 ~ 16자리</span>로 입력이 가능합니다.</p>
                     </td>
                 </tr>
                 <tr>
                     <td class="col1">비밀번호 확인</td>
-                    <td class="col2"><input type="password" maxlength="16"></td>
+                    <td class="col2">
+                        <input type="password" name="password_check" id="pw2" onchange="check_pw()" maxlength="16">&nbsp;<span id="check"></span></td>
                 </tr>
                 <tr>
                     <td class="col1">이메일</td>
                     <td class="col2">
                         <input type="email" name="email">
-<!--                        <input type="text" name="email1">-->
-<!--                        <span class="a">@</span>-->
-<!--                        <input type="text" name="email2">-->
-<!--                        <select name="mailslc">-->
-<!--                            <option value="self" selected>직접입력</option>-->
-<!--                            <option value="naver">naver.com</option>-->
-<!--                            <option value="gm">gmail.com</option>-->
-<!--                            <option value="da">daum.com</option>-->
-<!--                            <option value="yah">yahoo.com</option>-->
-<!--                        </select>-->
-                        <input class='but2' type="button" value="이메일 중복확인" onclick="">
                     </td>
                 </tr>
             </table>
@@ -270,10 +316,10 @@
                 return ;
             }
             alert('회원가입이 완료되었습니다.') ;
-     
+
             form.reset();
             }
-     
+
       </script>
       -->
 </body>

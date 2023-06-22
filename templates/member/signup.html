@@ -158,67 +158,10 @@
                 }
             }
         }
-
-
-<!--        function isSame() {-->
-<!--            var pw = document.twin.password.value;-->
-<!--            var checkPw = document.twin.password_check.value;-->
-<!--            if (pw.length < 6 || pw.length > 16) {-->
-<!--                window.alert('비밀번호는 8글자 이상, 16글자 이하만 이용 가능합니다.');-->
-<!--                document.getElementById('pw').value=document.getElementById('pw_check').value='';-->
-<!--                document.getElementById('same').innerHTML='';-->
-<!--            }-->
-<!--            if(document.getElementById('pw').value!='' && document.getElementById('pw_check').value!='') {-->
-<!--                if(document.getElementById('pw').value==document.getElementById('pw_check').value) {-->
-<!--                    document.getElementById('same').innerHTML='비밀번호가 일치합니다.';-->
-<!--                    document.getElementById('same').style.color='blue';-->
-<!--                }-->
-<!--                else {-->
-<!--                    document.getElementById('same').innerHTML='비밀번호가 일치하지 않습니다.';-->
-<!--                    document.getElementById('same').style.color='red';-->
-<!--                }-->
-<!--            }-->
-<!--        }-->
     </script>
 
 </head>
 <body>
-
-<!-- <footer>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
-        <div class="container-fluid">
-          <a class="navbar-brand" href="#">Mosaic The Face</a>
-          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-          </button>
-            <div class="collapse navbar-collapse" id="navbarColor01">
-                <ul class="navbar-nav me-auto">
-                <li class="nav-item">
-                    <a class="nav-link active" href="#">Home
-                    <span class="visually-hidden">(current)</span>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Board</a>
-                </li>
-
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Mypage</a>
-                </li>
-            </div>
-            </ul>
-            <form class="btn btn-primary">
-                <button type="button" class="btn btn-primary">sign up</button>
-                <button type="button" class="btn btn-primary">log in</button>
-              </form>
-          </div>
-        </div>
-      </nav>
-
-</footer> -->
-{% if error_message %}
-    <p>{{error_message}}</p>
-{% endif %}
 
 <form method="post" action="/member/signup">
     {% csrf_token %}
@@ -230,12 +173,10 @@
                 <tr>
                     <td class="col1">아이디</td>
                     <td class="col2">
-                        <input type="text" name="username" id="username" maxlength="10">
-                        <div class="check_font" id="id_check"></div>
-<!--                        <input class='but1' type="button" id="id_check" value="중복확인">-->
-
+                        <input type="text" name="username" maxlength="10">
+                        <button class='but1'>중복확인</button>
+                        <p>{{error_message}} {{success_message}}</p>
                     </td>
-
                 </tr>
                 <tr>
                     <td class="col1">이름</td>
@@ -245,7 +186,7 @@
                     <td class="col1">비밀번호</td>
                     <td class="col2">
                         <input type="password" name="password" id="pw" onchange="check_pw()" maxlength="16">
-                        <p>※비밀번호는 <span class="num">문자, 숫자, 특수문자(~!@#$%^&*)의 조합 8 ~ 16자리</span>로 입력이 가능합니다.</p>
+                        <p>※비밀번호는 <span class="num">문자, 숫자, 특수문자(!@#$%)의 조합 8 ~ 16자리</span>로 입력이 가능합니다.</p>
                     </td>
                 </tr>
                 <tr>
@@ -271,56 +212,6 @@
         </div>
     </div>
 </form>
-<!--
-    <script>
-        function formCheck(form) {
-            //유효성 검사
-            if(form.name.value == "") {
-                alert('이름을 입력하세요.');
-                form.name.focus() ;
-                return ;
-            }
-            if(form.id.value == "") {
-                alert('아이디를 입력하세요.');
-                form.id.focus() ;
-                return ;
-            }
-            if(form.pwd.value == "") {
-                alert('비밀번호를 입력하세요.');
-                form.pwd.focus() ;
-                return ;
-            }
-            if(form.pwd.value.length < 8 || form.pwd.value.length > 16) {
-                alert('비밀번호는 8 ~ 16자 사이로 입력하세요.');
-                form.pwd.focus() ;
-                return ;
-            }
-            if(form.pwdCheck.value == "") {
-                alert('비밀번호 확인을 입력하세요.');
-                form.pwdCheck.focus() ;
-                return ;
-            }
-            if(form.mailid.value == "") {
-                alert('e-mail을 입력하세요.');
-                form.mailid.focus() ;
-                return ;
-            }
-            if(form.mailid.value == "") {
-                alert('e-mail을 입력하세요.');
-                form.mailid.focus() ;
-                return ;
-            }
-            if(form.email.value == "" && form.mailslc.selectedIndex == 0) {
-                alert('e-mail을 입력하세요.');
-                form.mailslc.focus() ;
-                return ;
-            }
-            alert('회원가입이 완료되었습니다.') ;
 
-            form.reset();
-            }
-
-      </script>
-      -->
 </body>
 </html>

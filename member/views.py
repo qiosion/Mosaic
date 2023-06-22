@@ -24,27 +24,20 @@ def signup(request):
         # email1 = request.POST.get('email1')
         # email2 = request.POST.get('email2')
         if first_name and username and password and email:
-            # email = f"{email1}@{email2}"
-
-            # email_validator = EmailValidator()
-            # try:
-            #     email_validator(email)
-            # except ValidationError:
-            #     error_message = "유효한 이메일 주소를 입력해주세요."
-            #     context = {'error_message': error_message}
-            #     return render(request, 'member/signup.html', context)
-
             user = User(first_name=first_name, username=username, email=email)
-            user.set_password(password) # 비밀번호 암호화
+            user.set_password(password)  # 비밀번호 암호화
             user.save()
 
-            return redirect('index')  # 회원가입 성공 시 메인으로 돌아감
-        else:
-            error_message = "폼이 유효하지 않습니다"
+            return redirect('index')
+        if User.objects.filter(username=username).exists():
+            error_message = "이미 사용 중인 아이디 입니다."
             context = {'error_message': error_message}
-            return render(request,
-                          'member/signup.html',
-                          context)
+            return render(request, 'member/signup.html', context)
+        else:
+            success_message = "사용 가능한 아이디입니다"
+            context = {'success_message': success_message}
+            return render(request, 'member/signup.html', context)
+
     return HttpResponse("Invalid request")  # POST 메서드 외에는 처리하지 않음
 
 # 로그인

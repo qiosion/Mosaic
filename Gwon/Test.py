@@ -51,7 +51,7 @@ cv2.destroyAllWindows()
 output_path = '../media/mosaic/dd_change_blur.png'
 
 # 이미지 저장
-cv2.imwrite(output_path, img).
+cv2.imwrite(output_path, img)
 
 # 저장된 이미지 확인
 print('이미지 저장 완료!!!!:', output_path)

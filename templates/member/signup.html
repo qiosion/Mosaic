@@ -125,7 +125,67 @@
 
 
 
+
+
+
+
+
     </style>
+
+</head>
+<body>
+
+<form method="post" action="/member/signup">
+    {% csrf_token %}
+
+    <div class="container">
+        <div class="insert">
+            <table>
+                <caption><h2>회원가입 양식</h2></caption>
+                <tr>
+                    <td class="col1">아이디</td>
+                    <td class="col2">
+                        <input type="text" name="username" maxlength="10" required>
+                        <button class='but1' id="Id_check">중복확인</button>
+                        <p id="message">{{error_message}} {{success_message}}</p>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col1">이름</td>
+                    <td class="col2"><input type="text" name="first_name" maxlength="5" required></td>
+                </tr>
+                <tr>
+                    <td class="col1">비밀번호</td>
+                    <td class="col2">
+                        <input type="password" name="password" id="pw" onchange="check_pw()" maxlength="16" required>
+                        <p>※비밀번호는 <span class="num">문자, 숫자, 특수문자(!@#$%)의 조합 8 ~ 16자리</span>로 입력이 가능합니다.</p>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col1">비밀번호 확인</td>
+                    <td class="col2">
+                        <input type="password" name="password_check" id="pw2" onchange="check_pw()" maxlength="16"
+                               required>&nbsp;<span id="check"></span></td>
+                </tr>
+                <tr>
+                    <td class="col1">이메일</td>
+                    <td class="col2">
+                        <input type="email" name="email" required>
+                    </td>
+                </tr>
+            </table>
+
+        </div>
+
+        <div class="create">
+
+            <input class="but3" type="button" value="가입취소" onclick="location.href='{% url 'index' %}'">
+            <input class="but4" type="submit" value="회원가입"><!-- onclick="formCheck(this.form)"> -->
+
+        </div>
+    </div>
+</form>
+
     <script>
 
      function check_pw(){
@@ -157,61 +217,40 @@
                     document.getElementById('check').style.color='red';
                 }
             }
-        }
+    }
+
+<!--    아이디 중복확인-->
+    var checkButton = document.getElementById('Id_check');
+    checkButton.addEventListener('click', function() {
+        // 입력한 아이디 값 가져오기
+          var usernameInput = document.querySelector('input[name="username"]');
+          var username = usernameInput.value;
+          console.log('username : ', username);
+          var messageElement = document.getElementById('message');
+
+        // AJAX
+        var xhr = new XMLHttpRequest();
+        xhr.open('GET', '/member/checkId/?username=' + encodeURIComponent(username), true);
+        xhr.onload = function() {
+            if (xhr.status === 200) {
+                var response = JSON.parse(xhr.responseText);
+                if (response === 'available') {
+                    messageElement.textContent = '사용 가능한 아이디입니다.';
+                } else {
+                    messageElement.textContent = '이미 사용 중인 아이디입니다.';
+                }
+            } else {
+                messageElement.textContent = '오류가 발생했습니다.';
+            }
+        };
+
+        xhr.send();
+    })
+
+
+
+
+
     </script>
-
-</head>
-<body>
-
-<form method="post" action="/member/signup">
-    {% csrf_token %}
-
-    <div class="container">
-        <div class="insert">
-            <table>
-                <caption><h2>회원가입 양식</h2></caption>
-                <tr>
-                    <td class="col1">아이디</td>
-                    <td class="col2">
-                        <input type="text" name="username" maxlength="10">
-                        <button class='but1'>중복확인</button>
-                        <p>{{error_message}} {{success_message}}</p>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="col1">이름</td>
-                    <td class="col2"><input type="text" name="first_name" maxlength="5"></td>
-                </tr>
-                <tr>
-                    <td class="col1">비밀번호</td>
-                    <td class="col2">
-                        <input type="password" name="password" id="pw" onchange="check_pw()" maxlength="16">
-                        <p>※비밀번호는 <span class="num">문자, 숫자, 특수문자(!@#$%)의 조합 8 ~ 16자리</span>로 입력이 가능합니다.</p>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="col1">비밀번호 확인</td>
-                    <td class="col2">
-                        <input type="password" name="password_check" id="pw2" onchange="check_pw()" maxlength="16">&nbsp;<span id="check"></span></td>
-                </tr>
-                <tr>
-                    <td class="col1">이메일</td>
-                    <td class="col2">
-                        <input type="email" name="email">
-                    </td>
-                </tr>
-            </table>
-
-        </div>
-
-        <div class="create">
-
-            <input class="but3" type="button" value="가입취소" onclick="location.href='{% url 'index' %}'">
-            <input class="but4" type="submit" value="회원가입"><!-- onclick="formCheck(this.form)"> -->
-
-        </div>
-    </div>
-</form>
-
 </body>
 </html>

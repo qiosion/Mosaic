@@ -7,6 +7,7 @@ from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import update_session_auth_hash
+from django.http import JsonResponse
 
 
 # 회원가입
@@ -39,6 +40,19 @@ def signup(request):
             return render(request, 'member/signup.html', context)
 
     return HttpResponse("Invalid request")  # POST 메서드 외에는 처리하지 않음
+
+# 아이디 중복확인
+def checkId(request):
+    username = request.GET.get('username')
+    exists = User.objects.filter(username=username).exists()
+    print('username : ', username)
+    if exists:
+        response = 'unavailable'
+    else:
+        response = 'available'
+    print('exists : ', exists)
+    return JsonResponse(response, safe=False)
+
 
 # 로그인
 def login(request):

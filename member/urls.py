@@ -7,6 +7,7 @@ urlpatterns = [
     path('logout', views.logout, name="logout"),
     path('delete', views.delete, name="delete"),
     path('mypage', views.update, name="mypage"),
+    path('checkId/', views.checkId, name="checkId"),
 
 ]
 # path('delete/<int:board_no>', views.delete),

@@ -5,9 +5,9 @@ from django.shortcuts import render, redirect
 
 from config import settings
 from mosaicImg.models import MosaicImg
-import dlib
+# import dlib
 import random
-from imutils import face_utils
+# from imutils import face_utils
 from PIL import Image
 import os
 
@@ -36,12 +36,21 @@ def get_mosaic_haar(request, mos_no):
 
     # 이미지 불러오기
     if extension.lower() == '.png':
-        img = cv2.imread(input_path, cv2.IMREAD_COLOR)
+        img = cv2.imread(input_path, cv2.IMREAD_UNCHANGED)
         print("img : ", img)
     else:
         img = cv2.imread(input_path)
         print("img : ", img)
     gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+
+    # 해상도 3배 올리기
+    # 모델 로드하기
+    # sr = cv2.dnn_superres.DnnSuperResImpl_create()
+    # path = "ESPCN_x3.pb"
+    # sr.readModel(path)
+    # sr.setModel("espcn", 3)
+    # upscaled_img = cv2.resize(gray, None, fx=3, fy=3, interpolation=cv2.INTER_CUBIC)
+    # upscaledColor_img = cv2.resize(img, None, fx=3, fy=3, interpolation=cv2.INTER_CUBIC)
 
     # 얼굴 찾기
     faces = face_cascade.detectMultiScale(gray, 1.2, 4)
@@ -50,6 +59,12 @@ def get_mosaic_haar(request, mos_no):
         roi_gray = gray[y: y + h, x: x + w]
         roi_color = img[y: y + h, x: x + w]
 
+        # 모자이크 처리
+        mosaic_img = cv2.resize(roi_color, (w, h), interpolation=cv2.INTER_NEAREST)
+        roi_color = cv2.blur(roi_color, (50, 50))
+        mosaic = img
+        mosaic[y: y + h, x: x + w] = roi_color
+
     # 옆으로 돌아간 얼굴 찾기 ==> 완전한 측면은 인식 불가
     sideface = sideface_cascade.detectMultiScale(gray, 1.2, 3)
     for (x, y, w, h) in sideface:
@@ -57,29 +72,17 @@ def get_mosaic_haar(request, mos_no):
         roi_gray = gray[y: y + h, x: x + w]
         roi_color = img[y: y + h, x: x + w]
 
-        # 해상도 3배 올리기
-        # 모델 로드하기
-        sr = cv2.dnn_superres.DnnSuperResImpl_create()
-        sr.readModel('ESPCN_x3.pb')
-        sr.setModel('espcn', 3)
-        upscaled_img = cv2.resize(roi_color, None, fx=3, fy=3, interpolation=cv2.INTER_CUBIC)
-
-        # 이미지 축소하기
-        downscaled_img = cv2.resize(upscaled_img, None, fx=0.5, fy=0.5, interpolation=cv2.INTER_AREA)
-
         # 모자이크 처리
-        mosaic_img = cv2.resize(downscaled_img, (w, h), interpolation=cv2.INTER_NEAREST)
+        mosaic_img = cv2.resize(roi_color, (w, h), interpolation=cv2.INTER_NEAREST)
         roi_color = cv2.blur(roi_color, (50, 50))
         mosaic = img
         mosaic[y: y + h, x: x + w] = roi_color
 
-        # 원본에 모자이크처리 된 부분 합성
+        # # 원본에 모자이크처리 된 부분 합성
         img = mosaic
 
-        # 이미지 출력
-        cv2.imshow('blended_img', img)
-        cv2.waitKey(0)
-        cv2.destroyAllWindows()
+        # 이미지 축소하기
+        # dowunscaled_img = cv2.resize(plus_img, None, fx=0.5, fy=0.5, interpolation=cv2.INTER_AREA)
 
     # 이미지 저장
     output_path = os.path.join(settings.MEDIA_ROOT, 'mosaic', f'mosaic_{path}')

@@ -179,8 +179,8 @@ def update(request, board_no):
                     get_mosaic_haar(request, mos.mos_no)
                 elif selected_type == 'shuffle':
                     get_shuffle_img(request, mos.mos_no)
-                elif selected_type == 'faceShuffle':
-                    get_face_shuffle(request, mos.mos_no)
+                elif selected_type == 'jia':
+                    land_mosaic(request, mos.mos_no)
 
             return redirect('read', board_no=board.board_no)
 

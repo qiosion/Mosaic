@@ -681,18 +681,26 @@ body{
     top : -60px;
     left: 0;
 }
-.menu-first {
+.menu-1 {
   /* 첫 번째 메뉴의 위치 설정 */
-  margin-top: 150px;
+  margin-top: 100px;
+}
+.menu-2 {
+  /* 첫 번째 메뉴의 위치 설정 */
+  margin-top: 100px;
 }
 
-.menu-last {
+.menu-3 {
   /* 두 번째 메뉴의 위치 설정 */
-  margin-top: 150px;
-  color: red;
+  margin-top: 100px;
+  color: white;
 }
 
 .main-box {
   max-height: 928px;
   overflow-y: hidden;
+}
+
+.menu-item:hover a {
+  color: #cfcbcb; /* 원하는 색상으로 변경 */
 }

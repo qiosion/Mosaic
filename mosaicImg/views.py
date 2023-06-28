@@ -33,7 +33,6 @@ def get_mosaic_haar(request, mos_no):
     # haarcascade 불러오기
     face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')
     sideface_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_profileface.xml')
-    eye_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_eye.xml')
 
     # 이미지 불러오기
     if extension.lower() == '.png':
@@ -48,31 +47,43 @@ def get_mosaic_haar(request, mos_no):
     faces = face_cascade.detectMultiScale(gray, 1.2, 4)
     for (x, y, w, h) in faces:
         # cv2.rectangle(img, (x, y), (x + w, y + h), (0, 255, 0), 2)
-        roi_gray = gray[y: y+h, x: x+w]
-        roi_color = img[y: y+h, x: x+w]
+        roi_gray = gray[y: y + h, x: x + w]
+        roi_color = img[y: y + h, x: x + w]
 
-        # 모자이크 처리
-        roi_color = cv2.blur(roi_color, (50, 50))
-        img_w_mosaic = img
-        img_w_mosaic[y: y+h, x: x+w] = roi_color
-
-        # 눈 찾기
-        eye = eye_cascade.detectMultiScale(roi_gray, 2, 2)
-        for (ex, ey, ew, eh) in eye:
-            cv2.rectangle(roi_color, (ex, ey), (ex + ew, ey + eh), (255, 0, 0), 2)
-
+    # 옆으로 돌아간 얼굴 찾기 ==> 완전한 측면은 인식 불가
     sideface = sideface_cascade.detectMultiScale(gray, 1.2, 3)
     for (x, y, w, h) in sideface:
-        # cv2.rectangle(img, (x, y), (x + w, y + h), (255, 255, 255), 2)
+        # cv2.rectangle(img, (x, y), (x + w, y + h), (255, 0, 0), 2)
+        roi_gray = gray[y: y + h, x: x + w]
+        roi_color = img[y: y + h, x: x + w]
 
-        # 영상 출력
-        cv2.imshow('img_w_mosaic', img)
+        # 해상도 3배 올리기
+        # 모델 로드하기
+        sr = cv2.dnn_superres.DnnSuperResImpl_create()
+        sr.readModel('ESPCN_x3.pb')
+        sr.setModel('espcn', 3)
+        upscaled_img = cv2.resize(roi_color, None, fx=3, fy=3, interpolation=cv2.INTER_CUBIC)
+
+        # 이미지 축소하기
+        downscaled_img = cv2.resize(upscaled_img, None, fx=0.5, fy=0.5, interpolation=cv2.INTER_AREA)
+
+        # 모자이크 처리
+        mosaic_img = cv2.resize(downscaled_img, (w, h), interpolation=cv2.INTER_NEAREST)
+        roi_color = cv2.blur(roi_color, (50, 50))
+        mosaic = img
+        mosaic[y: y + h, x: x + w] = roi_color
+
+        # 원본에 모자이크처리 된 부분 합성
+        img = mosaic
+
+        # 이미지 출력
+        cv2.imshow('blended_img', img)
         cv2.waitKey(0)
         cv2.destroyAllWindows()
 
     # 이미지 저장
     output_path = os.path.join(settings.MEDIA_ROOT, 'mosaic', f'mosaic_{path}')
-    os.makedirs(os.path.dirname(output_path), exist_ok=True) # 저장 디렉터리 확인
+    os.makedirs(os.path.dirname(output_path), exist_ok=True)  # 저장 디렉터리 확인
     cv2.imwrite(output_path, img)
     print('이미지 저장 완료:', output_path)
 
@@ -80,64 +91,6 @@ def get_mosaic_haar(request, mos_no):
     mos.mos_down = f"mosaic/mosaic_{path}"
     mos.save()
 
-
-
-def get_mosaic_zoom(request, mos_no):
-    mos = MosaicImg.objects.get(mos_no=mos_no)
-    path = os.path.split(mos.mos_up.name)[1]
-    file_name, extension = os.path.splitext(path)
-    input_path = os.path.join(settings.MEDIA_ROOT, 'uploads', f'{path}')
-    print("input_path : ", input_path)
-
-    # haarcascade 불러오기
-    face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')
-    sideface_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_profileface.xml')
-    eye_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_eye.xml')
-
-    # 이미지 불러오기
-    if extension.lower() == '.png':
-        img = cv2.imread(input_path, cv2.IMREAD_COLOR)
-        print("img : ", img)
-    else:
-        img = cv2.imread(input_path)
-        print("img : ", img)
-    gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-
-    # 얼굴 찾기
-    faces = face_cascade.detectMultiScale(gray, 1.2, 4)
-    for (x, y, w, h) in faces:
-        # cv2.rectangle(img, (x, y), (x + w, y + h), (0, 255, 0), 2)
-        roi_gray = gray[y: y+h, x: x+w]
-        roi_color = img[y: y+h, x: x+w]
-
-        # 모자이크 처리
-        roi_color = cv2.blur(roi_color, (50, 50))
-        img_w_mosaic = img
-        img_w_mosaic[y: y+h, x: x+w] = roi_color
-
-        # 눈 찾기
-        eye = eye_cascade.detectMultiScale(roi_gray, 2, 2)
-        for (ex, ey, ew, eh) in eye:
-            cv2.rectangle(roi_color, (ex, ey), (ex + ew, ey + eh), (255, 0, 0), 2)
-
-    sideface = sideface_cascade.detectMultiScale(gray, 1.2, 3)
-    for (x, y, w, h) in sideface:
-        # cv2.rectangle(img, (x, y), (x + w, y + h), (255, 255, 255), 2)
-
-        # 영상 출력
-        cv2.imshow('img_w_mosaic', img)
-        cv2.waitKey(0)
-        cv2.destroyAllWindows()
-
-    # 이미지 저장
-    output_path = os.path.join(settings.MEDIA_ROOT, 'mosaic', f'mosaic_{path}')
-    os.makedirs(os.path.dirname(output_path), exist_ok=True) # 저장 디렉터리 확인
-    cv2.imwrite(output_path, img)
-    print('이미지 저장 완료:', output_path)
-
-    # DB에 저장
-    mos.mos_down = f"mosaic/mosaic_{path}"
-    mos.save()
 
 
 def zoom_image(image_path):
@@ -317,44 +270,6 @@ def shuffle_face_obj(pieces):
 #
 #     return combined_image
 
-
-# # 2배 Zoom
-# def zoom_image(image_path):
-#     img = cv2.imread(image_path)
-#     img_result = cv2.resize(img, None, fx=2, fy=2, interpolation=cv2.INTER_CUBIC)
-#     cv2.imshow("x2", img_result)
-#     cv2.waitKey(0)
-#     cv2.destroyAllWindows()
-#
-# image_path = 'faces0.png'
-# zoom_image(image_path)
-#
-#
-# # 해상도 3배로 올리는 함수
-# # 파일도 같이 올렸지만 혹시 돌아가지 않는 다면 pip install opencv-contrib-python 설치하기
-# def upscale_image(output_path):
-#     # 모델 로드하기
-#     sr = cv2.dnn_superres.DnnSuperResImpl_create()
-#     sr.readModel('ESPCN_x3.pb')
-#     sr.setModel('espcn', 3)
-#
-#     # 이미지 로드하기
-#     img = cv2.imread(output_path)
-#
-#     # 이미지 추론하기(해당 함수는 전처리와 후처리를 한꺼번에 해줍니다.)
-#     result = sr.upsample(img)
-#
-#     # 결과 이미지 비교하기
-#     resized_img = cv2.resize(img, dsize=None, fx=3, fy=3)
-#
-#     cv2.imshow('Original Image', img)   # 원본
-#     cv2.imshow('Resized Image', resized_img)  # 크기를 3배로 변경한 이미지
-#     cv2.imshow('Upscaled Image', result)   # 해상도 올린 이미지
-#     cv2.waitKey(0)
-#     cv2.destroyAllWindows()
-#
-# image_path = 'zoom_pp0.jpg'
-# upscale_image(image_path)
 
 def land_mosaic(request, mos_no):
     mos = MosaicImg.objects.get(mos_no=mos_no)

@@ -43,7 +43,7 @@ def get_mosaic_haar(request, mos_no):
         print("img : ", img)
     gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 
-    # 해상도 3배 올리기
+    ## 해상도 3배 올리기
     # 모델 로드하기
     # sr = cv2.dnn_superres.DnnSuperResImpl_create()
     # path = "ESPCN_x3.pb"

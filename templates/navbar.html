@@ -13,13 +13,6 @@
                 <li class="nav-item">
                     <a class="nav-link" href="{% url 'list' %}">Board</a>
                 </li>
-                {% if user.is_authenticated %}
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'my_list' %}">작성글</a>
-                </li>
-                {% endif %}
-
-
             </ul>
             <form class="btn btn-primary">
 

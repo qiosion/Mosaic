@@ -1,0 +1,14 @@
+<div class="sidebar">
+  <!-- 좌측 네비게이션 바 내용 -->
+  <ul>
+    <li class="menu-item menu-first"><a href="{% url 'my_list' %}">작성글</a></li>
+    <li class="menu-item menu-last"><a onclick="confirmDelete()">회원탈퇴</a></li>
+  </ul>
+</div>
+<script>
+  function confirmDelete() {
+    if (confirm("정말로 회원탈퇴 하시겠습니까?")) {
+      location.href = "{% url 'delete' %}";
+    }
+  }
+</script>

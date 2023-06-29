@@ -12,6 +12,10 @@
         <link rel="stylesheet" type="text/css" href="{% static "index.css" %}">
     {% include 'navbar.html' %}
     </header>
+    <aside class="sidebar">
+        <link rel="stylesheet" type="text/css" href="{% static "nav.css" %}">
+        {% include 'newnav.html' %}
+    </aside>
     <div class="board_wrap">
         <div class="board_title">
             <strong>작성글 확인</strong>

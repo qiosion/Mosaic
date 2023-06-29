@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>모자이크 게시판</title>
+    <title>게시판</title>
     {% load static %}
     <link rel="stylesheet" href="{% static "css.css" %}">
 </head>
@@ -45,13 +45,11 @@
                     </dl>
                 </div>
                 <div class="cont">
-                    <textarea placeholder="내용 입력" name="board_content">
-                        {{board.board_content}}
-                    </textarea>
+                    <textarea placeholder="내용 입력" name="board_content">{{board.board_content}}</textarea>
                 </div>
             </div>
             <div class="bt_wrap">
-                <button class="on">수정</button>
+                <button type="submit" class="on">수정</button>
                 <a href="{% url 'read' board_no=board.board_no %}">취소</a>
             </div>
         </div>

@@ -170,16 +170,12 @@ def update(request, board_no):
             if board_title:
                 board.board_title = board_title
                 board.board_content = board_content
-            board.save()
+                board.save()
 
-            if mos_up is None:
-                # 아무 파일도 선택하지 않은 경우 기존 파일 사용
-                mos_up = mos.mos_up
+            if mos_up is not None:
+                mos.mos_up = mos_up
+                mos.save()
 
-            mos.mos_up = mos_up
-            mos.save()
-
-            if mos_up:
                 if selected_type == 'harr':
                     get_mosaic_haar(request, mos.mos_no)
                 elif selected_type == 'shuffle':
@@ -191,10 +187,8 @@ def update(request, board_no):
 
         except Exception as e:
             error_message = '게시글 업데이트에 실패했습니다.'
-            return render(request,
-                          'board/update.html',
-                          {'board': board, 'mos': mos,
-                           'error_message': error_message})
+            context = {'board': board, 'mos': mos, 'error_message': error_message}
+            return render(request, 'board/update.html', context)
 
     elif request.method == 'GET':
         # GET 요청인 경우, 게시글 수정 페이지 보여주기

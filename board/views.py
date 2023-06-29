@@ -154,15 +154,19 @@ def my_list(request):
 
 # 게시글 수정
 def update(request, board_no):
+    # 게시글 조회
     board = get_object_or_404(Board, board_no=board_no)
     mos = get_object_or_404(MosaicImg, board_no=board)
 
     if request.method == 'POST':
+        # POST 요청인 경우, 게시글 업데이트 수행
         board_title = request.POST.get('board_title')
         board_content = request.POST.get('board_content')
         mos_up = request.FILES.get('mos_up')
         selected_type = request.POST.get('type')
+
         try:
+            # 게시글 제목과 내용 업데이트
             if board_title:
                 board.board_title = board_title
                 board.board_content = board_content
@@ -174,6 +178,7 @@ def update(request, board_no):
 
             mos.mos_up = mos_up
             mos.save()
+
             if mos_up:
                 if selected_type == 'harr':
                     get_mosaic_haar(request, mos.mos_no)
@@ -190,26 +195,27 @@ def update(request, board_no):
                           'board/update.html',
                           {'board': board, 'mos': mos,
                            'error_message': error_message})
+
     elif request.method == 'GET':
+        # GET 요청인 경우, 게시글 수정 페이지 보여주기
         context = {'board': board, 'mos': mos}
-        return render(
-            request,
-            'board/update.html',
-            context
-        )
+        return render(request, 'board/update.html', context)
 
 # 게시글 삭제
 def delete(request, board_no):
+    # 현재 로그인된 사용자
     user = request.user
+
+    # 게시글 조회
     board = get_object_or_404(Board, board_no=board_no)
     mos = get_object_or_404(MosaicImg, board_no=board_no)
 
-    # 게시글 작성자와 세션의 아이디가 동일한 경우에만 삭제 가능
+    # 게시글 작성자와 세션의 사용자가 동일한 경우에만 삭제 가능
     if user == board.member:
         try:
             if mos:
                 mos_no = mos.mos_no
-                mosaic_download_url = mos.get_mosaic_download_url()  # mosaic_download URL 생성
+                mosaic_download_url = mos.get_mosaic_download_url()  # 모자이크 다운로드 URL 생성
                 print('mosaic_download_url:', mosaic_download_url)
 
                 # 모자이크 이미지 삭제
@@ -218,6 +224,7 @@ def delete(request, board_no):
                 if os.path.exists(mosaic_path):
                     os.remove(mosaic_path)
                 mos.delete()
+
             board.delete()
 
         except Exception as e:
@@ -226,9 +233,10 @@ def delete(request, board_no):
                           'board/read.html',
                           {'board': board,
                            'error_message': error_message})
+
         return redirect('list')
     else:
-        error_message = '게시글 작성자가 아닙니다'
+        error_message = '게시글 작성자가 아닙니다.'
         return render(request,
                       'board/read.html',
                       {'board': board, 'error_message': error_message})

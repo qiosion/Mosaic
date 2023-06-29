@@ -51,7 +51,6 @@
                 </div>
             </div>
             <div class="bt_wrap">
-                <input type="checkbox" id="fileChangeCheck" name="fileChange" style="display: none;">
                 <button class="on">수정</button>
                 <a href="{% url 'read' board_no=board.board_no %}">취소</a>
             </div>
@@ -60,10 +59,5 @@
 </form>
     {% block content %}
     {% endblock %}
-<script type = "text/javascript">
-    $('form').submit( function() {
-        $('#fileChangeCheck').prop("checked",true)
-    });
-</script>
 </body>
 </html>

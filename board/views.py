@@ -200,12 +200,24 @@ def update(request, board_no):
 
 # 게시글 삭제
 def delete(request, board_no):
-    login_session = request.session.get('login_session', '')
+    user = request.user
     board = get_object_or_404(Board, board_no=board_no)
+    mos = get_object_or_404(MosaicImg, board_no=board_no)
 
     # 게시글 작성자와 세션의 아이디가 동일한 경우에만 삭제 가능
-    if login_session == board.member:
+    if user == board.member:
         try:
+            if mos:
+                mos_no = mos.mos_no
+                mosaic_download_url = mos.get_mosaic_download_url()  # mosaic_download URL 생성
+                print('mosaic_download_url:', mosaic_download_url)
+
+                # 모자이크 이미지 삭제
+                mosaic_path = os.path.join(settings.MEDIA_ROOT, mos.mos_down.name)
+
+                if os.path.exists(mosaic_path):
+                    os.remove(mosaic_path)
+                mos.delete()
             board.delete()
 
         except Exception as e:

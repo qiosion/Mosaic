@@ -2,6 +2,7 @@ from django.db import models
 from datetime import datetime
 from board.models import Board
 from django.shortcuts import get_object_or_404
+from django.urls import reverse
 import os
 
 def upload_path(instance, filename):
@@ -31,6 +32,10 @@ class MosaicImg(models.Model):
     #     if self.mos_up:
     #         os.remove(os.path.join(settings.MEDIA_ROOT, self.mos_up.path))
     #     super(MosaicImg, self).delete(*args, **kwargs)
+
+    def get_mosaic_download_url(self):
+        return reverse('mosaic_download', kwargs={'mos_no': self.mos_no})
+    # reverse() 함수를 사용하여 mosaic_download URL 패턴에 필요한 mos_no 인자를 전달하고, 해당 URL을 반환
 
     class Meta:
         db_table = "MosaicImg"

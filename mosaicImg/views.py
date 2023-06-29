@@ -269,10 +269,15 @@ def land_mosaic(request, mos_no):
     path = os.path.split(mos.mos_up.name)[1]
     file_name, extension = os.path.splitext(path)
     input_path = os.path.join(settings.MEDIA_ROOT, 'uploads', f'{path}')
-    # 이미지 불러오기
-    img = cv2.imread('../images/people.jpg')
+    print("input_path : ", input_path)
 
-    # 이미지를 그레이스케일로 변환
+    # 이미지 불러오기
+    if extension.lower() == '.png':
+        img = cv2.imread(input_path, cv2.IMREAD_UNCHANGED)
+        print("img : ", img)
+    else:
+        img = cv2.imread(input_path)
+        print("img : ", img)
     gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 
     # zoom 3배
@@ -280,7 +285,7 @@ def land_mosaic(request, mos_no):
     upscaled_img = cv2.resize(gray, None, fx=4, fy=4, interpolation=cv2.INTER_CUBIC)
 
     # 데이터 파일과 이미지 파일 경로
-    predictor_file = '../shape_predictor_68_face_landmarks.dat/shape_predictor_68_face_landmarks.dat'
+    predictor_file = 'mosaicImg/shape_predictor_68_face_landmarks.dat'
     detector = dlib.get_frontal_face_detector()
     predictor = dlib.shape_predictor(predictor_file)
 
@@ -296,9 +301,6 @@ def land_mosaic(request, mos_no):
         (x, y, w, h) = face_utils.rect_to_bb(rect)
         face_region = upscaledColor_img[y:y + h, x:x + w]
 
-        # 줌 3배 + 모자이크 적용
-        # mosaic = cv2.blur(face_region, (25, 25))  # 흐림 효과 적용
-        # mosaic = upscaledColor_img[y:y + h, x:x + w]
 
         mosaic_img = cv2.resize(face_region, (w, h), interpolation=cv2.INTER_NEAREST)
         face_region = cv2.blur(mosaic_img, (50, 50))

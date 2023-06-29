@@ -43,51 +43,41 @@ def get_mosaic_haar(request, mos_no):
         print("img : ", img)
     gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 
-    ## 해상도 3배 올리기
-    # 모델 로드하기
-    # sr = cv2.dnn_superres.DnnSuperResImpl_create()
-    # path = "ESPCN_x3.pb"
-    # sr.readModel(path)
-    # sr.setModel("espcn", 3)
-    # upscaled_img = cv2.resize(gray, None, fx=3, fy=3, interpolation=cv2.INTER_CUBIC)
-    # upscaledColor_img = cv2.resize(img, None, fx=3, fy=3, interpolation=cv2.INTER_CUBIC)
+    # zoom 3배
+    upscaledColor_img = cv2.resize(img, None, fx=3, fy=3, interpolation=cv2.INTER_CUBIC)
+    upscaled_img = cv2.resize(gray, None, fx=3, fy=3, interpolation=cv2.INTER_CUBIC)
 
     # 얼굴 찾기
-    faces = face_cascade.detectMultiScale(gray, 1.2, 4)
-    for (x, y, w, h) in faces:
-        # cv2.rectangle(img, (x, y), (x + w, y + h), (0, 255, 0), 2)
-        roi_gray = gray[y: y + h, x: x + w]
-        roi_color = img[y: y + h, x: x + w]
+    faces = face_cascade.detectMultiScale(upscaled_img, 1.2, 4)
 
-        # 모자이크 처리
-        mosaic_img = cv2.resize(roi_color, (w, h), interpolation=cv2.INTER_NEAREST)
-        roi_color = cv2.blur(roi_color, (50, 50))
-        mosaic = img
-        mosaic[y: y + h, x: x + w] = roi_color
+    # # 옆으로 돌아간 얼굴 찾기 ==> 완전한 측면은 인식 불가
+    sideface = sideface_cascade.detectMultiScale(upscaled_img, 1.2, 3)
 
-    # 옆으로 돌아간 얼굴 찾기 ==> 완전한 측면은 인식 불가
-    sideface = sideface_cascade.detectMultiScale(gray, 1.2, 3)
-    for (x, y, w, h) in sideface:
-        # cv2.rectangle(img, (x, y), (x + w, y + h), (255, 0, 0), 2)
-        roi_gray = gray[y: y + h, x: x + w]
-        roi_color = img[y: y + h, x: x + w]
+    for (x1, y1, w1, h1) in faces:
 
-        # 모자이크 처리
-        mosaic_img = cv2.resize(roi_color, (w, h), interpolation=cv2.INTER_NEAREST)
-        roi_color = cv2.blur(roi_color, (50, 50))
-        mosaic = img
-        mosaic[y: y + h, x: x + w] = roi_color
+        for (x2, y2, w2, h2) in sideface:
 
-        # # 원본에 모자이크처리 된 부분 합성
-        img = mosaic
+            # 얼굴 영역이 일치하는지 확인
+            if (x1, y1, w1, h1) != (x2, y2, w2, h2):
+                # cv2.rectangle(upscaledColor_img, (x1, y1), (x1 + w1, y1 + h1), (0, 255, 0), 2)
+                roi_color = upscaledColor_img[y1: y1 + h1, x1: x1 + w1]
 
-        # 이미지 축소하기
-        # dowunscaled_img = cv2.resize(plus_img, None, fx=0.5, fy=0.5, interpolation=cv2.INTER_AREA)
+                # 모자이크 처리
+                mosaic_img = cv2.resize(roi_color, (w1, h1), interpolation=cv2.INTER_NEAREST)
+                roi_color = cv2.blur(mosaic_img, (50, 50))
+                mosaic = upscaledColor_img
+                mosaic[y1: y1 + h1, x1: x1 + w1] = roi_color
+
+                # # 원본에 모자이크처리 된 부분 합성
+                plus_img = mosaic
+
+                downscaled_img = cv2.resize(plus_img, None, fx=0.5, fy=0.5, interpolation=cv2.INTER_AREA)
+                result_downscaled_img = cv2.resize(downscaled_img, None, fx=0.7, fy=0.7, interpolation=cv2.INTER_AREA)
 
     # 이미지 저장
     output_path = os.path.join(settings.MEDIA_ROOT, 'mosaic', f'mosaic_{path}')
     os.makedirs(os.path.dirname(output_path), exist_ok=True)  # 저장 디렉터리 확인
-    cv2.imwrite(output_path, img)
+    cv2.imwrite(output_path, result_downscaled_img)
     print('이미지 저장 완료:', output_path)
 
     # DB에 저장

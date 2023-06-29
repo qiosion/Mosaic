@@ -5,9 +5,9 @@ from django.shortcuts import render, redirect
 
 from config import settings
 from mosaicImg.models import MosaicImg
-# import dlib
+import dlib
 import random
-# from imutils import face_utils
+from imutils import face_utils
 from PIL import Image
 import os
 
@@ -270,43 +270,53 @@ def land_mosaic(request, mos_no):
     file_name, extension = os.path.splitext(path)
     input_path = os.path.join(settings.MEDIA_ROOT, 'uploads', f'{path}')
     # 이미지 불러오기
-    img = cv2.imread(input_path)
+    img = cv2.imread('../images/people.jpg')
 
-    # 해상도 3배 올리기
-    sr = cv2.dnn_superres.DnnSuperResImpl_create()
-    sr.readModel('ESPCN_x3.pb')
-    sr.setModel('espcn', 3)
-    upscaled_img = cv2.resize(img, None, fx=3, fy=3, interpolation=cv2.INTER_CUBIC)
+    # 이미지를 그레이스케일로 변환
+    gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+
+    # zoom 3배
+    upscaledColor_img = cv2.resize(img, None, fx=4, fy=4, interpolation=cv2.INTER_CUBIC)
+    upscaled_img = cv2.resize(gray, None, fx=4, fy=4, interpolation=cv2.INTER_CUBIC)
 
     # 데이터 파일과 이미지 파일 경로
-    predictor_file = 'shape_predictor_68_face_landmarks.dat'
+    predictor_file = '../shape_predictor_68_face_landmarks.dat/shape_predictor_68_face_landmarks.dat'
     detector = dlib.get_frontal_face_detector()
     predictor = dlib.shape_predictor(predictor_file)
 
-    # 이미지를 그레이스케일로 변환
-    gray = cv2.cvtColor(upscaled_img, cv2.COLOR_BGR2GRAY)
-
     # 얼굴 검출
-    rects = detector(gray, 1)
+    rects = detector(upscaled_img, 1)
+
+    # 몇 개 찾은지 확인
     print("Number of faces detected: {}".format(len(rects)))
 
     # 각 얼굴에 대해 모자이크 처리
     for rect in rects:
         # 얼굴 영역 추출
         (x, y, w, h) = face_utils.rect_to_bb(rect)
-        face_region = upscaled_img[y:y + h, x:x + w]
+        face_region = upscaledColor_img[y:y + h, x:x + w]
 
-        # 모자이크 적용
-        mosaic = cv2.blur(face_region, (25, 25))  # 흐림 효과 적용
-        upscaled_img[y:y + h, x:x + w] = mosaic
+        # 줌 3배 + 모자이크 적용
+        # mosaic = cv2.blur(face_region, (25, 25))  # 흐림 효과 적용
+        # mosaic = upscaledColor_img[y:y + h, x:x + w]
 
-    # 이미지 축소하기
-    downscaled_img = cv2.resize(upscaled_img, None, fx=0.5, fy=0.5, interpolation=cv2.INTER_AREA)
+        mosaic_img = cv2.resize(face_region, (w, h), interpolation=cv2.INTER_NEAREST)
+        face_region = cv2.blur(mosaic_img, (50, 50))
+        mosaic = upscaledColor_img
+        mosaic[y: y + h, x: x + w] = face_region
+
+        # 원본에 모자이크처리 된 부분 합성
+        plus_img = mosaic
+
+        # 이미지 축소하기
+        downscaled_img = cv2.resize(plus_img, None, fx=0.5, fy=0.5, interpolation=cv2.INTER_AREA)
+        result_downscaled_img = cv2.resize(downscaled_img, None, fx=0.5, fy=0.5, interpolation=cv2.INTER_AREA)
+
 
     # 이미지 저장
     output_path = os.path.join(settings.MEDIA_ROOT, 'mosaic', f'mosaic_{path}')
     os.makedirs(os.path.dirname(output_path), exist_ok=True) # 저장 디렉터리 확인
-    cv2.imwrite(output_path, downscaled_img)
+    cv2.imwrite(output_path, result_downscaled_img)
 
     # DB에 저장
     mos.mos_down = f"mosaic/mosaic_{path}"

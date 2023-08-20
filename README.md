@@ -3,14 +3,10 @@
 개발기간 : 2023.05~2023.07
 
 ##  개발팀 소개 Team Description
-- 강은선 (조장)
-	- https://github.com/qiosion
-- 김권아
-	- https://github.com/KimGwonA
-- 김지아
-	- https://github.com/jia0426
-- 이승현
-	- https://github.com/MandarinMarmalade
+- [qiosion (조장)](https://github.com/qiosion)
+- [KimGwonA](https://github.com/KimGwonA)
+- [jia0426](https://github.com/jia0426)
+- [MandarinMarmalade](https://github.com/MandarinMarmalade)
 
 ##  프로젝트 소개 Project Description
 - 얼굴인식 알고리즘을 적용한 이미지 생성 인공지능 모델을 사용한 웹 사이트<br>

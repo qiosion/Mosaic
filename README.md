@@ -13,6 +13,8 @@
 A website using an image-generating artificial intelligence model applied with a face recognition algorithm
 - 마스크 착용 해제로 인해 얼굴 노출이 증가한 요즘, 팀 모자이크는 개인정보 보호를 위해 모자이크 서비스를 개발하기로 하였습니다.<br>
 These days, when face exposure has increased due to the removal of masks, Team Mosaic has decided to develop a mosaic service to protect personal information.
+- 구현 영상<br>
+<img width="90%" src="https://github.com/qiosion/ParkingManagementSystem/assets/118775029/f4b1f32a-94c8-4ad1-8f45-3e56c617baf8"/><br>
 
 ###  환경 Environment
 > Python 3.8.17<br>

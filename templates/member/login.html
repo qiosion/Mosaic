@@ -9,6 +9,12 @@
     <title>login</title>
 </head>
 <body>
+<script>
+    // 에러 메시지가 있다면 팝업으로 띄우기
+    {% if error_message %}
+    alert("{{ error_message }}");
+    {% endif %}
+</script>
     <header>
         <link rel="stylesheet" href="{% static 'index.css' %}">
     {% include 'navbar.html' %}

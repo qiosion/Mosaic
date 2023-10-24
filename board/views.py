@@ -12,7 +12,6 @@ from board.models import Board
 from mosaicImg.models import MosaicImg
 from mosaicImg.views import get_mosaic_haar
 from mosaicImg.views import get_shuffle_img
-# from mosaicImg.views import get_face_shuffle
 from mosaicImg.views import land_mosaic
 from config import settings
 
@@ -25,7 +24,6 @@ def create(request):
         board_content = request.POST.get('board_content')
         mos_up = request.FILES.get('mos_up')
         selected_type = request.POST.get('type')
-        print('selected_type : ', selected_type)
 
         # 제목과 업로드 파일만 요구함
         if board_title and mos_up:
@@ -45,8 +43,6 @@ def create(request):
                 land_mosaic(request, mos.mos_no)
             elif selected_type == 'shuffle':
                 get_shuffle_img(request, mos.mos_no)
-            # elif selected_type == 'faceShuffle':
-            #     get_face_shuffle(request, mos.mos_no)
             return redirect('read', board_no=board.board_no)
         else:
             error_message = '제목 작성과 업로드할 파일을 첨부를 확인하세요'
@@ -210,7 +206,6 @@ def delete(request, board_no):
             if mos:
                 mos_no = mos.mos_no
                 mosaic_download_url = mos.get_mosaic_download_url()  # 모자이크 다운로드 URL 생성
-                print('mosaic_download_url:', mosaic_download_url)
 
                 # 모자이크 이미지 삭제
                 mosaic_path = os.path.join(settings.MEDIA_ROOT, mos.mos_down.name)

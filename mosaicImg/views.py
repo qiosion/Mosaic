@@ -11,24 +11,19 @@ from imutils import face_utils
 from PIL import Image
 import os
 
-
 def mosaic_download(request, mos_no):
     mos = MosaicImg.objects.get(mos_no=mos_no)
     path = os.path.split(mos.mos_up.name)[1]
-    print("다운로드시 경로 뭐냐 path : ", path)
     mosaic_path = os.path.join(settings.MEDIA_ROOT, 'mosaic', f'mosaic_{path}')
     mosaic_url = settings.MEDIA_URL + 'mosaic/' + f'mosaic_{path}'
 
     return redirect(mosaic_url)
-
-
 
 def get_mosaic_haar(request, mos_no):
     mos = MosaicImg.objects.get(mos_no=mos_no)
     path = os.path.split(mos.mos_up.name)[1]
     file_name, extension = os.path.splitext(path)
     input_path = os.path.join(settings.MEDIA_ROOT, 'uploads', f'{path}')
-    print("input_path : ", input_path)
 
     # haarcascade 불러오기
     face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')
@@ -37,10 +32,8 @@ def get_mosaic_haar(request, mos_no):
     # 이미지 불러오기
     if extension.lower() == '.png':
         img = cv2.imread(input_path, cv2.IMREAD_UNCHANGED)
-        print("img : ", img)
     else:
         img = cv2.imread(input_path)
-        print("img : ", img)
     gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 
     # zoom 3배
@@ -78,7 +71,6 @@ def get_mosaic_haar(request, mos_no):
     output_path = os.path.join(settings.MEDIA_ROOT, 'mosaic', f'mosaic_{path}')
     os.makedirs(os.path.dirname(output_path), exist_ok=True)  # 저장 디렉터리 확인
     cv2.imwrite(output_path, result_downscaled_img)
-    print('이미지 저장 완료:', output_path)
 
     # DB에 저장
     mos.mos_down = f"mosaic/mosaic_{path}"
@@ -123,7 +115,6 @@ def get_shuffle_img(request, mos_no):
     path = os.path.split(mos.mos_up.name)[1]
 
     input_path = os.path.join(settings.MEDIA_ROOT, 'uploads', f'{path}')
-    print("input_path : ", input_path)
 
     pieces = split_image(input_path)
     shuffled_pieces = shuffle_pieces(pieces)
@@ -178,14 +169,12 @@ def get_face_shuffle(request, mos_no):
     path = os.path.split(mos.mos_up.name)[1]
 
     input_path = os.path.join(settings.MEDIA_ROOT, 'uploads', f'{path}')
-    print("input_path : ", input_path)
 
     # haarcascade 불러오기
     face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')
 
     # 이미지 불러오기
     img = cv2.imread(input_path)
-    print("img : ", img)
     gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 
     # 얼굴 찾기
@@ -220,7 +209,6 @@ def get_face_shuffle(request, mos_no):
     os.makedirs(os.path.dirname(output_path), exist_ok=True)
     # cv2.imwrite(output_path, result)
     cv2.imwrite(output_path, combined_image_np)
-    print('이미지 저장 완료:', output_path)
 
     # DB에 저장
     mos.mos_down = f"mosaic/mosaic_{path}"
@@ -269,15 +257,12 @@ def land_mosaic(request, mos_no):
     path = os.path.split(mos.mos_up.name)[1]
     file_name, extension = os.path.splitext(path)
     input_path = os.path.join(settings.MEDIA_ROOT, 'uploads', f'{path}')
-    print("input_path : ", input_path)
 
     # 이미지 불러오기
     if extension.lower() == '.png':
         img = cv2.imread(input_path, cv2.IMREAD_UNCHANGED)
-        print("img : ", img)
     else:
         img = cv2.imread(input_path)
-        print("img : ", img)
     gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 
     # zoom 3배
@@ -293,7 +278,7 @@ def land_mosaic(request, mos_no):
     rects = detector(upscaled_img, 1)
 
     # 몇 개 찾은지 확인
-    print("Number of faces detected: {}".format(len(rects)))
+    # print("Number of faces detected: {}".format(len(rects)))
 
     # 각 얼굴에 대해 모자이크 처리
     for rect in rects:

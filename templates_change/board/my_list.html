@@ -1,0 +1,61 @@
+{% extends "navbar.html" %}
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <title>작성글 보기</title>
+</head>
+<body>
+    {% block content %}
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'index.css' %}">
+    <aside class="sidebar">
+        <link rel="stylesheet" type="text/css" href="{% static 'nav.css' %}">
+        {% include 'newnav.html' %}
+    </aside>
+    <div class="board_wrap">
+        <div class="board_title">
+            <strong>작성글 확인</strong>
+        </div>
+        <div class="board_list_wrap">
+            <div class="board_list">
+                <div class="top">
+                    <div class="num">번호</div>
+                    <div class="title">제목</div>
+                    <div class="date">작성일</div>
+                </div>
+                {% for post in page_obj %}
+                    <div>
+                        <div class="num">{{post.board_no}}</div>
+                        <div class="title"><a href="{% url 'read' post.board_no %}">{{post.board_title}}</a></div>
+                        <div class="date">{{post.board_date}}</div>
+                    </div>
+                {% endfor %}
+            </div>
+            <div class="board_page">
+                {% if page_obj.has_other_pages %}
+                    <a href="?page=1" class="bt first"><<</a>
+                    {% if page_obj.has_previous %}
+                        <a href="?page={{page_obj.previous_page_number}}" class="bt prev"><</a>
+                    {% endif %}
+
+                    {% for page in custom_range %}
+                        {% if page == page_obj.number %}
+                            <a href="?page={{page}}" class="num on">{{page}}</a>
+                        {% else %}
+                            <a href="?page={{page}}" class="num">{{page}}</a>
+                        {% endif %}
+                    {% endfor %}
+
+                    {% if page_obj.has_next %}
+                        <a href="?page={{page_obj.next_page_number}}" class="bt next">></a>
+                    {% endif %}
+                    <a href="?page={{page_obj.paginator.num_pages}}" class="bt last">>></a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    {% endblock %}
+</body>
+</html>
+

@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+{% if post %}
+    {{ post.title }} <br>
+    {{ post.content }} <br>
+
+    {% if request.user == post.member %}
+        <a href="/forum/update/{{ post.id }}">수정</a>
+        <a href="/forum/delete/{{ post.id }}">삭제</a>
+    {% endif %}
+{% endif %}
+</body>
+</html>

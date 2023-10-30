@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>목록</title>
+</head>
+<body>
+    {% if request.user.is_authenticated %}
+        {{ request.user }}
+    {% endif %}
+    <br>
+    <table>
+        <thead>
+            <th>글 번호</th>
+            <th>제목</th>
+            <th>작성자</th>
+            <th>작성일시</th>
+        </thead>
+        {% if posts %}
+            {% for post in posts %}
+                <tr>
+                    <td>
+                        {{ post.id }}
+                    </td>
+                    <td>
+                        {{ post.title }}
+                    </td>
+                    <td>
+                        {{ post.member }}
+                    </td>
+                    <td>
+                        {{ post.create_date }}
+                    </td>
+                </tr>
+            {% endfor %}
+        {% endif %}
+    </table>
+</body>
+</html>

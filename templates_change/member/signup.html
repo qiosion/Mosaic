@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <title>Signup</title>
+    <style type="text/css">
+        /* div.container{} */
+
+        /* div.insert{} */
+
+      div.create{
+      width: 800px;
+      text-align: center;
+      padding: 30px;
+      border-bottom: 1px solid black;
+      margin: auto;
+      }
+
+      table{
+      height: 300px;
+      width: 900px;
+      border-top: 3px solid black;
+      margin-right: auto;
+      margin-left: auto;
+      }
+
+      td{
+      border-bottom: 1px dotted black;
+      }
+
+      caption{
+      text-align: left;
+      }
+
+      .col1 {
+      background-color: #e8e8e8;
+      padding: 10px;
+      text-align: right;
+      font-weight: bold;
+      font-size: 0.8em;
+      }
+
+      .col2 {
+      text-align: left;
+      padding: 5px;
+      }
+
+      .but1 {
+      height: 25px;
+      width: 80px;
+      color: white;
+      background-color: black;
+      border-color: black;
+      }
+
+      .but2 {
+      height: 27px;
+      width: 120px;
+      color: white;
+      background-color: black;
+      border-color: black;
+      }
+
+      .but3 {
+      height: 35px;
+      width: 150px;
+      background-color: white;
+      border: 2px solid black;
+      }
+
+      .but4{
+      height: 35px;
+      width: 150px;
+      background-color: white;
+      border: 2px solid black;
+      }
+
+      .but1:hover {
+      background-color: #b9b9b9;
+      color: black;
+      border: 2px solid black;
+      }
+
+      .but2:hover {
+      background-color: #b9b9b9;
+      color: black;
+      border: 2px solid black;
+      }
+
+      .but3:hover {
+      background-color: black;
+      color: white;
+      border: 2px solid black;
+      }
+
+      .but4:hover {
+      background-color: black;
+      color: white;
+      border: 2px solid black;
+      }
+
+      p{
+      font-size: 0.7em;
+      }
+
+      .g{
+      font-size: 0.7em;
+      }
+
+      .c{
+      font-size: 0.7em;
+      }
+
+      .a{
+      font-size: 0.7em;
+      }
+
+      .num{
+      color: red;
+      }
+    </style>
+</head>
+<body>
+
+<form method="post" action="/member/signup">
+    {% csrf_token %}
+
+    <div class="container">
+        <div class="insert">
+            <table>
+                <caption><h2>회원가입 양식</h2></caption>
+                <tr>
+                    <td class="col1">아이디</td>
+                    <td class="col2">
+                        <input type="text" name="username" maxlength="10" required>
+                        <button class='but1' id="Id_check">중복확인</button>
+                        <p id="message">{{error_message}} {{success_message}}</p>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col1">이름</td>
+                    <td class="col2"><input type="text" name="first_name" maxlength="5" required></td>
+                </tr>
+                <tr>
+                    <td class="col1">비밀번호</td>
+                    <td class="col2">
+                        <input type="password" name="password" id="pw" onchange="check_pw()" maxlength="16" required>
+                        <p>※비밀번호는 <span class="num">문자, 숫자, 특수문자(!@#$%)의 조합 8 ~ 16자리</span>로 입력이 가능합니다.</p>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col1">비밀번호 확인</td>
+                    <td class="col2">
+                        <input type="password" name="password_check" id="pw2" onchange="check_pw()" maxlength="16"
+                               required>&nbsp;<span id="check"></span></td>
+                </tr>
+                <tr>
+                    <td class="col1">이메일</td>
+                    <td class="col2">
+                        <input type="email" name="email" required>
+                    </td>
+                </tr>
+            </table>
+
+        </div>
+
+        <div class="create">
+
+            <input class="but3" type="button" value="가입취소" onclick="location.href='{% url 'index' %}'">
+            <input class="but4" type="submit" value="회원가입"><!-- onclick="formCheck(this.form)"> -->
+
+        </div>
+    </div>
+</form>
+
+    <script>
+
+     function check_pw(){
+
+            var pw = document.getElementById('pw').value;
+            var SC = ["!","@","#","$","%"];
+            var check_SC = 0;
+
+            if(pw.length < 6 || pw.length>16){
+                window.alert('비밀번호는 6글자 이상, 16글자 이하만 이용 가능합니다.');
+                document.getElementById('pw').value='';
+            }
+            for(var i=0;i<SC.length;i++){
+                if(pw.indexOf(SC[i]) != -1){
+                    check_SC = 1;
+                }
+            }
+            if(check_SC == 0){
+                window.alert('!,@,#,$,% 의 특수문자가 들어가 있지 않습니다.')
+                document.getElementById('pw').value='';
+            }
+            if(document.getElementById('pw').value !='' && document.getElementById('pw2').value!=''){
+                if(document.getElementById('pw').value==document.getElementById('pw2').value){
+                    document.getElementById('check').innerHTML='비밀번호가 일치합니다.'
+                    document.getElementById('check').style.color='blue';
+                }
+                else{
+                    document.getElementById('check').innerHTML='비밀번호가 일치하지 않습니다.';
+                    document.getElementById('check').style.color='red';
+                }
+            }
+    }
+
+<!--    아이디 중복확인-->
+    var checkButton = document.getElementById('Id_check');
+    checkButton.addEventListener('click', function() {
+        // 입력한 아이디 값 가져오기
+          var usernameInput = document.querySelector('input[name="username"]');
+          var username = usernameInput.value;
+          console.log('username : ', username);
+          var messageElement = document.getElementById('message');
+
+        // AJAX
+        var xhr = new XMLHttpRequest();
+        xhr.open('GET', '/member/checkId/?username=' + encodeURIComponent(username), true);
+        xhr.onload = function() {
+            if (xhr.status === 200) {
+                var response = JSON.parse(xhr.responseText);
+                if (response === 'available') {
+                    messageElement.textContent = '사용 가능한 아이디입니다.';
+                } else {
+                    messageElement.textContent = '이미 사용 중인 아이디입니다.';
+                }
+            } else {
+                messageElement.textContent = '오류가 발생했습니다.';
+            }
+        };
+
+        xhr.send();
+    })
+
+
+
+
+
+    </script>
+</body>
+</html>

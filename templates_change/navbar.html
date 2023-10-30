@@ -1,0 +1,75 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" type="text/css" href="{% static 'bootstrap.min.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'bootstrap.css' %}">
+    <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/earlyaccess/notosanskr.css">
+
+    <style>
+        .new-btn {
+          width: 66px;
+          height: 30px;
+          line-height: 25px;
+          background-color: #fff;
+          border-radius: 15px;
+          transition-duration: 0.3s;
+          transition-timing-function: ease;
+          font-size: 12px;
+          cursor: pointer;
+          text-align: center;}
+
+       .new-primary {
+          border: 1px solid #00c3bd;
+          color: #00c3bd;}
+
+      .new-primary:hover {
+        color: white;
+        background-color: #00c3bd;}
+
+      .font-style {
+        font-family: "Noto Sans KR", serif;}
+    </style>
+<!--{% block extrahead %}-->
+<!--{% endblock %}-->
+</head>
+<body>
+    <header>
+        <nav class="navbar navbar-expand-md fixed-top"
+            style="background-color: rgba(255, 255, 255, 0.9); color: #666;">
+            <a class="navbar-brand font-style">Mosaic The Face</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+                    aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item active">
+                        <a class="nav-link font-style" href="{% url 'index' %}">Home <span class="sr-only">(current)</span></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link font-style" href="{% url 'list' %}">Borad</a>
+                    </li>
+                </ul>
+
+                <form class="form-inline my-2 my-lg-0">
+                     {% if user.is_authenticated %}
+                        <button type="button" class="new-btn new-primary font-style" onclick="location.href='{% url 'mypage' %}'">Mypage
+                        </button>
+                        <button type="button" class="new-btn new-primary font-style" onclick="location.href='{% url 'logout' %}'">LogOut
+                        </button>
+                    {% else %}
+                        <button type="button" class="new-btn new-primary font-style" onclick="location.href='{% url 'login' %}'">LogIn
+                        </button>
+                        <button type="button" class="new-btn new-primary font-style" onclick="location.href='{% url 'signup' %}'">SignUp
+                        </button>
+                    {% endif %}
+                </form>
+            </div>
+        </nav>
+    </header>
+    {% block content %}
+    {% endblock %}
+</body>
+</html>

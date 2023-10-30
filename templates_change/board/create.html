@@ -1,0 +1,56 @@
+{% extends "navbar.html" %}
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    {% load static %}
+    <title>모자이크 게시판</title>
+</head>
+<body>
+    {% block content %}
+    <link rel="stylesheet" href="{% static 'css.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'index.css' %}">
+    <form action="{% url 'create' %}" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{error_message}}
+        <div class="board_wrap">
+            <div class="board_title">
+                <h1>사진 업로드</h1>
+    <!--            <p>게시판에 글을 올려주세요.</p> -->
+            </div>
+            <div class="board_write_wrap">
+                <div class="board_write">
+                    <div class="title">
+                        <dl>
+                            <dt>제목</dt>
+                            <dd><input type="text" placeholder="제목 입력" name="board_title"></dd>
+                        </dl>
+                    </div>
+                    <div class="info">
+                        <dl>
+                            <dt>파일</dt>
+                            <dd><input type="file"  name="mos_up"></dd>
+                        </dl>
+                        <dl>
+                            <dt>모자이크 형식</dt>
+                            <dd>
+                                <input type="radio" name="type" value="harr" checked>모자이크
+                                <input type="radio" name="type" value="jia">land_mosaic
+                                <input type="radio" name="type" value="shuffle">이미지 섞기
+    <!--                            <input type="radio" name="type" value="faceShuffle">얼굴 섞기-->
+                            </dd>
+                        </dl>
+                    </div>
+                    <div class="cont">
+                        <textarea placeholder="내용 입력" name="board_content"></textarea>
+                    </div>
+                </div>
+                <div class="bt_wrap">
+                    <button type="submit">등록</button>
+                    <a href="{% url 'list' %}">취소</a>
+                </div>
+            </div>
+        </div>
+    </form>
+    {% endblock %}
+</body>
+</html>

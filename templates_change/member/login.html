@@ -1,0 +1,27 @@
+{% extends "navbar.html" %}
+{% load static %}
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <title>login</title>
+</head>
+<body>
+    {% block content %}
+    <link rel="stylesheet" href="{% static 'change_style.css' %}">
+    <div id="login">
+        <form method="POST" action="/member/login">
+            <h1>Login</h1>
+            {% csrf_token %}
+            <input type="text" name="username" placeholder="아이디">
+            <input type="password" name="password" placeholder="비밀번호">
+            <label for="remember-check">
+                <input type="checkbox" id="remember-check">아이디 저장하기
+            </label>
+<!--            <input type="submit" value="Login">-->
+            <button type="submit" class="btn btn-login">로그인</button>
+        </form>
+    </div>
+    {% endblock %}
+</body>
+</html>
+

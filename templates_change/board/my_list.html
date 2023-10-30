@@ -2,57 +2,64 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-    <title>작성글 보기</title>
+    {% load static %}
+<!--    {% block extrahead %}-->
+<!--    <link rel="stylesheet" href="{% static 'index.css' %}">-->
+<!--    <link rel="stylesheet" href="{% static 'css.css' %}">-->
+<!--    <link rel="stylesheet" href="{% static 'css.css' %}">-->
+<!--    <link rel="stylesheet" type="text/css" href="{% static 'bootstrap.min.css' %}">-->
+<!--    <link rel="stylesheet" type="text/css" href="{% static 'bootstrap.css' %}">-->
+<!--    {% endblock %}-->
+    <title>게시판</title>
+    <style>
+        .font-style2 {
+        font-family: "Noto Sans KR", serif;
+        color: #00c3bd;
+        }
+    </style>
 </head>
 <body>
     {% block content %}
-    {% load static %}
-    <link rel="stylesheet" href="{% static 'css.css' %}">
-    <link rel="stylesheet" type="text/css" href="{% static 'index.css' %}">
-    <aside class="sidebar">
-        <link rel="stylesheet" type="text/css" href="{% static 'nav.css' %}">
-        {% include 'newnav.html' %}
-    </aside>
-    <div class="board_wrap">
-        <div class="board_title">
-            <strong>작성글 확인</strong>
-        </div>
-        <div class="board_list_wrap">
-            <div class="board_list">
-                <div class="top">
-                    <div class="num">번호</div>
-                    <div class="title">제목</div>
-                    <div class="date">작성일</div>
-                </div>
-                {% for post in page_obj %}
-                    <div>
-                        <div class="num">{{post.board_no}}</div>
-                        <div class="title"><a href="{% url 'read' post.board_no %}">{{post.board_title}}</a></div>
-                        <div class="date">{{post.board_date}}</div>
-                    </div>
-                {% endfor %}
-            </div>
-            <div class="board_page">
-                {% if page_obj.has_other_pages %}
-                    <a href="?page=1" class="bt first"><<</a>
-                    {% if page_obj.has_previous %}
-                        <a href="?page={{page_obj.previous_page_number}}" class="bt prev"><</a>
-                    {% endif %}
-
-                    {% for page in custom_range %}
-                        {% if page == page_obj.number %}
-                            <a href="?page={{page}}" class="num on">{{page}}</a>
-                        {% else %}
-                            <a href="?page={{page}}" class="num">{{page}}</a>
-                        {% endif %}
-                    {% endfor %}
-
-                    {% if page_obj.has_next %}
-                        <a href="?page={{page_obj.next_page_number}}" class="bt next">></a>
-                    {% endif %}
-                    <a href="?page={{page_obj.paginator.num_pages}}" class="bt last">>></a>
+    <div class="container" style="margin-top: 100px;">
+         <form>
+            <h3>작성글 확인</h3>
+         </form>
+        <table class="table table-hover text-center" style="border: 1px solid;">
+            <thead>
+                <th>번호</th>
+                <th>제목</th>
+                <th>글쓴이</th>
+                <th>작성일</th>
+            </thead>
+            {% for post in page_obj %}
+            <tbody>
+                <td>{{ post.board_no }}</td>
+                <td><a href="{% url 'read' post.board_no %}">{{ post.board_title }}</a></td>
+                <td>{{ post.member }}</td>
+                <td>{{ post.board_date }}</td>
+            </tbody>
+            {% endfor %}
+        </table>
+        <div class="pagination justify-content-center">
+            {% if page_obj.has_other_pages %}
+                <a href="?page=1" class="page-link"><<</a>
+                {% if page_obj.has_previous %}
+                    <a href="?page={{page_obj.previous_page_number}}" class="page-link"><</a>
                 {% endif %}
-            </div>
+
+                {% for page in custom_range %}
+                    {% if page == page_obj.number %}
+                        <a href="?page={{page}}" class="page-link">{{page}}</a>
+                    {% else %}
+                        <a href="?page={{page}}" class="page-link">{{page}}</a>
+                    {% endif %}
+                {% endfor %}
+
+                {% if page_obj.has_next %}
+                    <a href="?page={{page_obj.next_page_number}}" class="page-link">></a>
+                {% endif %}
+                    <a href="?page={{page_obj.paginator.num_pages}}" class="page-link">>></a>
+            {% endif %}
         </div>
     </div>
     {% endblock %}

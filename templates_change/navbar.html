@@ -51,6 +51,11 @@
                     <li class="nav-item">
                         <a class="nav-link font-style" href="{% url 'list' %}">Borad</a>
                     </li>
+                    {% if user.is_authenticated %}
+                    <li class="nav-item">
+                        <a class="nav-link font-style" href="{% url 'my_list' %}">작성글 확인</a>
+                    </li>
+                    {% endif %}
                 </ul>
 
                 <form class="form-inline my-2 my-lg-0">
